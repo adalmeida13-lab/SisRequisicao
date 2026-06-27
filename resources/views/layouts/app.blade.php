@@ -123,6 +123,10 @@
                     <i class="bi bi-building"></i>
                     Empresas
                 </a>
+                <a href="{{ route('departments.index') }}">
+                    <i class="bi bi-diagram-3"></i>
+                    Departamentos
+                </a>
 
             </div>
 

@@ -15,4 +15,9 @@ Route::get('/companies/trashed', [\App\Http\Controllers\CompanyController::class
 Route::put('/companies/{id}/restore', [\App\Http\Controllers\CompanyController::class, 'restore'])->name('companies.restore');
 Route::delete('/companies/{id}/force-delete', [\App\Http\Controllers\CompanyController::class, 'forceDelete'])->name('companies.forceDelete');
 Route::resource('companies', \App\Http\Controllers\CompanyController::class);
+Route::get('/departments/trashed', [\App\Http\Controllers\DepartmentController::class, 'trashed'])->name('departments.trashed');
+Route::put('/departments/{id}/restore', [\App\Http\Controllers\DepartmentController::class, 'restore'])->name('departments.restore');
+Route::delete('/departments/{id}/force-delete', [\App\Http\Controllers\DepartmentController::class, 'forceDelete'])->name('departments.forceDelete');
+Route::resource('departments', \App\Http\Controllers\DepartmentController::class);
+
 

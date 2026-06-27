@@ -1,45 +1,44 @@
 @extends('layouts.app')
 
 @section('page-title')
-    Usuários
+    Departamentos
 @endsection
 
-@section('content')
-    <a href="{{ route('users.create') }}" class="btn btn-primary">
+@section ('content')
+    <a href="{{ route('departments.create') }}" class="btn btn-primary mb-3">
         <i class="bi bi-plus-lg"></i>
-        Novo usuário
+        Novo departamento
     </a>
-    <a href="{{ route('users.trashed') }}" class="btn btn-secondary">
+    <a href="{{ route('departments.trashed') }}" class="btn btn-secondary mb-3">
         <i class="bi bi-trash"></i>
-        Usuários Excluídos
+        Departamentos Excluídos
     </a>
     <div class="card">
-        <div class="card-body">
+        <div class="card-body"></div>
             <table class="table table-striped">
                 <thead>
                     <tr>
                         <th>Ações</th>
                         <th>Nome</th>
-                        <th>Email</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($users as $user)
+                    @foreach($departments as $department)
                         <tr>
-                             <td>
-                                <a href="{{ route('users.edit', $user) }}"
+                            <td>
+                                <a href="{{ route('departments.edit', $department) }}"
                                 class="btn btn-sm btn-secondary">
                                     <i class="bi bi-pencil"></i>
                                     Editar
                                 </a>
                                 <!-- Button to Open the Modal -->
-                            <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modalDelete{{ $user->id }}">
+                                <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modalDelete{{ $department->id }}">
                                     <i class="bi bi-trash"></i>
                                     Excluir
                                 </button>
 
                                 <!-- The Modal -->
-                                <div class="modal" id="modalDelete{{ $user->id }}">
+                                <div class="modal" id="modalDelete{{ $department->id }}">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
 
@@ -51,38 +50,23 @@
 
                                         <!-- Modal body -->
                                         <div class="modal-body">
-                                            <p>Tem certeza que deseja excluir o usuário {{ $user->name }}?</p>
+                                            <p>Tem certeza que deseja excluir o departamento {{ $department->name }}?</p>
                                         </div>
 
                                         <!-- Modal footer -->
                                         <div class="modal-footer">
-                                            <form action="{{ route('users.destroy', $user) }}" method="POST">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                            <form action="{{ route('departments.destroy', $department) }}" method="POST" class="d-inline">
                                                 @csrf
                                                 @method('DELETE')
-
-                                                <button type="submit" class="btn btn-danger">
-                                                    <i class="bi bi-trash"></i>
-                                                    Sim! Excluir
-                                                </button>
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                                    Não! Cancelar
-                                                </button>
+                                                <button type="submit" class="btn btn-danger">Excluir</button>
                                             </form>
                                         </div>
-
                                         </div>
                                     </div>
                                 </div>
-
-                                <a href="{{ route('users.show', $user) }}"
-                                class="btn btn-sm btn-secondary">
-                                    <i class="bi bi-eye"></i>
-                                    Visualizar
-                                </a>
-
                             </td>
-                            <td>{{ $user->name }}</td>
-                            <td>{{ $user->email }}</td>
+                            <td>{{ $department->name }}</td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -90,3 +74,4 @@
         </div>
     </div>
 @endsection
+

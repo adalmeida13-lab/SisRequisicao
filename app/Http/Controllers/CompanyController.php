@@ -81,6 +81,10 @@ class CompanyController extends Controller
      */
     public function destroy(string $id)
     {
+        $departmentCount = \App\Models\Department::where('company_id', $id)->count();
+        if ($departmentCount > 0) {
+            return redirect()->route('companies.index')->with('error', 'Não é possível excluir a empresa, pois existem departamentos associados a ela.');
+        }
         $company = \App\Models\Company::findOrFail($id);
         $company->delete();
 
@@ -91,6 +95,20 @@ class CompanyController extends Controller
     {
         $companies = \App\Models\Company::onlyTrashed()->get();
         return view('companies.trashed', compact('companies'));
+    }
+    public function restore(string $id)
+    {
+        $company = \App\Models\Company::onlyTrashed()->findOrFail($id);
+        $company->restore();
+
+        return redirect()->route('companies.trashed')->with('success', 'Empresa restaurada com sucesso.');
+    }
+    public function forceDelete(string $id)
+    {
+        $company = \App\Models\Company::onlyTrashed()->findOrFail($id);
+        $company->forceDelete();
+
+        return redirect()->route('companies.trashed')->with('success', 'Empresa deletada permanentemente.');
     }
 
 }
