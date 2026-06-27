@@ -7,23 +7,22 @@
         <table class="table">
             <thead>
                 <tr>
+                    <th>Ações</th>
                     <th>Nome</th>
                     <th>Empresa</th>
-                    <th>Ações</th>
+
                 </tr>
             </thead>
             <tbody>
                 @foreach($departments as $department)
                     <tr>
-                        <td>{{ $department->name }}</td>
-                        <td>{{ $department->company->name ?? 'Nenhuma' }}</td>
                         <td>
                             <form action="{{ route('departments.restore', $department->id) }}" method="POST" style="display: inline;">
                                 @csrf
                                 @method('PUT')
                                 <button type="button" class = "btn btn-success" data-bs-toggle="modal" data-bs-target="#restoreModal{{ $department->id }}">
                                     <i class="bi bi-undo"></i>
-                                    restaurar
+                                    Restaurar
                                 </button>
                                 <div class="modal fade" id="restoreModal{{ $department->id }}" tabindex="-1" aria-labelledby="restoreModalLabel{{ $department->id }}" aria-hidden="true">
                                     <div class="modal-dialog">
@@ -49,6 +48,8 @@
                                 <button type="submit" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir permanentemente?')">Excluir Permanente</button>
                             </form>
                         </td>
+                        <td>{{ $department->name }}</td>
+                        <td>{{ $department->company->name ?? 'Nenhuma' }}</td>
                     </tr>
                 @endforeach
             </tbody>
