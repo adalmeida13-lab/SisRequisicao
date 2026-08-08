@@ -105,12 +105,12 @@
                     Dashboard
                 </a>
 
-                <a href="#">
+                <a href="{{ route('servicerequest.index') }}">
                     <i class="bi bi-list-task"></i>
                     Requisições
                 </a>
 
-                <a href="#">
+                <a href="{{ route('servicerequest.create') }}">
                     <i class="bi bi-plus-circle"></i>
                     Nova Requisição
                 </a>

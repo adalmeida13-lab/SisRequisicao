@@ -19,5 +19,10 @@ Route::get('/departments/trashed', [\App\Http\Controllers\DepartmentController::
 Route::put('/departments/{id}/restore', [\App\Http\Controllers\DepartmentController::class, 'restore'])->name('departments.restore');
 Route::delete('/departments/{id}/force-delete', [\App\Http\Controllers\DepartmentController::class, 'forceDelete'])->name('departments.forceDelete');
 Route::resource('departments', \App\Http\Controllers\DepartmentController::class);
+Route::get('/service_requests/trashed', [\App\Http\Controllers\ServiceRequestController::class, 'trashed'])->name('service_requests.trashed');
+Route::put('/service_requests/{id}/restore', [\App\Http\Controllers\ServiceRequestController::class, 'restore'])->name('service_requests.restore');
+Route::delete('/service_requests/{id}/force-delete', [\App\Http\Controllers\ServiceRequestController::class, 'forceDelete'])->name('service_requests.forceDelete');
+Route::resource('servicerequest', \App\Http\Controllers\ServiceRequestController::class);
+
 
 
