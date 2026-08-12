@@ -209,11 +209,5 @@
         </div>
     </div>
 
-    <!-- PAGINAÇÃO -->
-    <div class="d-flex justify-content-center mt-4">
-        @if(isset($requisicoes))
-            {{ $requisicoes->links('pagination::bootstrap-5') }}
-        @endif
-    </div>
 </div>
 @endsection
