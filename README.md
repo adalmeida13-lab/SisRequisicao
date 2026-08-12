@@ -379,6 +379,52 @@ Confira os arquivos de documentação:
 
 ---
 
-**Status:** 🟡 SA02 EM PROGRESSO (60% completo)  
-**Próxima:** Entrega com prints e commits  
+## 🔧 Melhorias SA03 - Padronização e Boas Práticas
+
+### Melhorias Implementadas
+
+✅ **Organização de Arquivos**
+- Criação de estrutura em `public/css/`, `public/js/`, `public/images/`
+- Separação lógica de assets
+
+✅ **Padronização de Nomenclatura**
+- Arquivos: kebab-case
+- Classes CSS: kebab-case
+- IDs HTML: camelCase
+- Funções JS: camelCase
+
+✅ **Refatoração de CSS**
+- Arquivo `custom-styles.css` com classes reutilizáveis
+- Variáveis CSS para cores e espaçamentos
+- Eliminação de código repetido
+
+✅ **HTML Semântico**
+- Tags semânticas (`<header>`, `<main>`, `<section>`)
+- Melhor acessibilidade
+- Labels associados corretamente
+
+✅ **Documentação**
+- Checklist de Boas Práticas criado
+- Comentários úteis no código
+- README atualizado
+
+✅ **Versionamento**
+- Commits coerentes por tarefa
+- Mensagens descritivas (refactor, fix, docs, style)
+
+### Arquivos Modificados/Criados
+
+- `public/css/custom-styles.css` ← **NOVO**
+- `docs/Checklist-Boas-Praticas-SA03.md` ← **NOVO**
+- `README.md` ← Atualizado
+- Estrutura de pastas reorganizada
+
+### Evidências
+
+Consulte o arquivo `docs/Checklist-Boas-Praticas-SA03.md` para detalhes completos de cada boa prática aplicada.
+
+---
+
+**Status:** 🟡 SA03 IMPLEMENTADA  
+**Próxima:** SA04 - Integração completa  
 
