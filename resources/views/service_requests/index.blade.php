@@ -167,7 +167,7 @@
                                 </span>
                             </td>
                             <td class="small">
-                                {{ $req->created_at ? $req->created_at->format('d/m/Y') : '-' }}
+                                {{ $req->data ?? '-' }}
                             </td>
                             <td class="text-center">
                                 <div class="btn-group btn-group-sm" role="group">

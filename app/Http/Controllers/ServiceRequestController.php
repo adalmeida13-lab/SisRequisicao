@@ -76,6 +76,11 @@ class ServiceRequestController extends Controller
             });
         }
 
+        // Converter arrays para objetos para compatibilidade com Blade
+        $requisicoes = collect($query)->map(function ($req) {
+            return (object) $req;
+        })->toArray();
+
         // ESTATÍSTICAS
         $total = count(self::$requisicoes);
         $abertas = count(array_filter(self::$requisicoes, fn($r) => $r['status'] === 'aberta'));
@@ -83,7 +88,7 @@ class ServiceRequestController extends Controller
         $encerradas = count(array_filter(self::$requisicoes, fn($r) => $r['status'] === 'encerrada'));
 
         return view('service_requests.index', [
-            'requisicoes' => $query,
+            'requisicoes' => $requisicoes,
             'total' => $total,
             'abertas' => $abertas,
             'emAndamento' => $emAndamento,
