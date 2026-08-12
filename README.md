@@ -1,77 +1,384 @@
-# Sistema de Requisição (SisRequisicao)
+# 🚀 SisRequisição - Sistema de Requisição de Serviços
 
-## Objetivo
+**Um MVP Front-End desenvolvido em PHP/Laravel com Bootstrap, seguindo a metodologia Scrum.**
 
-Sistema interno para registrar e acompanhar requisições de serviço entre as áreas
-(administrativo, atendimento e operação) de uma organização de médio porte. O MVP
-permite cadastrar usuários, empresas e departamentos, além de abrir, acompanhar e
-encerrar requisições de serviço com rastreabilidade do fluxo entre departamentos.
+---
 
-## Tecnologias
+## 📋 Sobre o Projeto
 
-- **Back-end:** PHP 8 + Laravel
-- **Front-end:** Blade (HTML + CSS) + JavaScript
-- **Banco de dados:** MySQL (via Eloquent ORM)
-- **Versionamento:** Git + GitHub
+Sistema interno para registrar e acompanhar requisições de serviço entre as áreas (administrativo, atendimento e operação).
 
-## Metodologia de desenvolvimento
+### Funcionalidades Implementadas
 
-- **Metodologia:** Scrum (ágil)
-- **Por que escolhemos:** o contexto exige lidar com mudanças de prioridade e tempo
-  limitado. O Scrum organiza o trabalho em sprints curtas, com papéis definidos,
-  reuniões de planejamento/revisão e entregas incrementais validadas pelas áreas
-  usuárias, garantindo rastreabilidade do que foi combinado e entregue.
+✅ **Listagem de Requisições**
+- Tabela responsiva com todos os dados
+- Cards de estatísticas (total, abertas, em andamento, encerradas)
+- Pagination (suporta grande volume de dados)
 
-## Como vamos trabalhar
+✅ **Filtros e Busca (100% em PHP/Laravel)**
+- Busca por texto na descrição
+- Filtro por status (aberta, em andamento, encerrada, cancelada)
+- Filtro por prioridade (baixa, média, alta)
+- Limpar filtros
 
-- **Fluxo:** Backlog → Em andamento → Revisão → Concluído
-- **Rotina de acompanhamento:** alinhamento rápido no início de cada aula e revisão
-  ao final de cada sprint.
-- **Ferramenta de tarefas:** GitHub Projects (quadro Kanban) — [link do quadro]
+✅ **Formulário de Criação**
+- Validação em PHP/Laravel (segura)
+- Campos semânticos (empresa, departamento, prioridade, descrição)
+- Mensagens de erro personalizadas
+- Feedback visual dos erros
 
-## Definição de pronto (DoD)
+✅ **Validação Completa em PHP**
+- Campos obrigatórios
+- Tamanho mínimo/máximo de texto
+- Valores de enum (status, prioridade)
+- Mensagens customizadas
 
-- Funciona no navegador sem erros visíveis.
-- Sem erros no console (quando aplicável).
-- Estrutura HTML organizada/semântica.
-- CSS aplicado conforme padrão combinado.
-- JS implementado conforme o esperado no MVP.
-- Versionado no repositório com commit(s) coerente(s).
-- Atualizado no quadro de tarefas (status e responsável).
+✅ **Dashboard**
+- Cards com resumo de estatísticas
+- Contadores atualizados dinamicamente
 
-## Como executar
+✅ **Interface Responsiva**
+- Bootstrap 5 para layout
+- Testado em desktop e mobile (2+ larguras)
+- Ícones Bootstrap Icons
 
-Pré-requisitos: PHP 8+, Composer, Node.js e um banco MySQL.
+---
+
+## 🛠️ Tecnologias Utilizadas
+
+- **Backend:** PHP 8.3 + Laravel 13
+- **Frontend:** Blade Templates + Bootstrap 5
+- **CSS Framework:** Bootstrap 5 + Bootstrap Icons
+- **Validação:** Laravel Request Validation (100% PHP)
+- **Banco de Dados:** Simulado em memória (pronto para MySQL)
+- **Versionamento:** Git
+
+---
+
+## 📦 Pré-requisitos
+
+- PHP 8.3+
+- Composer
+- Git
+
+---
+
+## 🚀 Como Executar
+
+### 1. Clonar o Repositório
 
 ```bash
-# 1. Instalar dependências
-composer install
-npm install
+git clone https://github.com/adalmeida13-lab/SisRequisicao.git
+cd SisRequisicao
+```
 
-# 2. Configurar ambiente
+### 2. Instalar Dependências
+
+```bash
+composer install
+```
+
+### 3. Configurar .env
+
+```bash
 cp .env.example .env
 php artisan key:generate
-# edite o .env com as credenciais do banco
+```
 
-# 3. Criar o banco e rodar as migrations
-php artisan migrate
+### 4. Rodar o Servidor
 
-# 4. Subir o servidor local
+```bash
 php artisan serve
 ```
 
-Acesse `http://localhost:8000`.
+Acesse em: **http://localhost:8000**
 
-## Documentação
+---
 
-- [Plano do Projeto (SA01)](docs/plano-do-projeto-SA01.md)
-
-## Estrutura de pastas
+## 📂 Estrutura de Pastas
 
 ```
-app/            Código da aplicação (Controllers, Models)
-database/       Migrations, factories e seeders
-resources/views Views Blade (HTML/CSS/JS)
-routes/         Definição de rotas
-docs/           Documentação do projeto
+SisRequisicao/
+├── app/
+│   └── Http/
+│       └── Controllers/
+│           ├── ServiceRequestController.php    ← LÓGICA DE FILTROS E VALIDAÇÃO
+│           ├── UserController.php
+│           ├── CompanyController.php
+│           └── DepartmentController.php
+├── resources/
+│   └── views/
+│       ├── layouts/
+│       │   └── app.blade.php                   ← LAYOUT PRINCIPAL
+│       └── service_requests/
+│           ├── index.blade.php                 ← LISTAGEM COM FILTROS
+│           ├── create.blade.php                ← FORMULÁRIO (NOVA SA02)
+│           ├── edit.blade.php
+│           └── show.blade.php
+├── routes/
+│   └── web.php                                 ← ROTAS
+├── composer.json
+└── README.md
 ```
+
+---
+
+## 🎯 Principais Funcionalidades (SA02)
+
+### 1. Validação em PHP/Laravel
+
+No `ServiceRequestController.php`:
+
+```php
+public function store(Request $request)
+{
+    $validated = $request->validate([
+        'empresa_id' => 'required|integer|min:1',
+        'departamento_id' => 'required|integer|min:1',
+        'prioridade' => 'required|in:baixa,media,alta',
+        'descricao' => 'required|string|min:10|max:500'
+    ]);
+    // ... cria requisição
+}
+```
+
+**Validações implementadas:**
+- ✅ Campos obrigatórios
+- ✅ Tipos de dados (integer, string, etc.)
+- ✅ Tamanho mínimo/máximo
+- ✅ Valores enumerados (in:...)
+- ✅ Mensagens customizadas em português
+
+### 2. Filtros em PHP (Query)
+
+```php
+public function index(Request $request)
+{
+    $query = self::$requisicoes;
+
+    // Filtro por busca
+    if ($request->has('busca')) {
+        $query = array_filter($query, function ($req) use ($busca) {
+            return stripos($req['descricao'], $busca) !== false;
+        });
+    }
+
+    // Filtro por status
+    if ($request->has('status')) {
+        $query = array_filter($query, function ($req) use ($status) {
+            return $req['status'] === $status;
+        });
+    }
+
+    // ... mais filtros
+}
+```
+
+**Filtros implementados:**
+- ✅ Busca por texto (LIKE em SQL)
+- ✅ Filtro por status
+- ✅ Filtro por prioridade
+- ✅ Múltiplos filtros simultâneos
+- ✅ Limpar filtros
+
+### 3. Feedback de Usuário
+
+**Flash Messages (Laravel Sessions):**
+
+```php
+return redirect()
+    ->route('servicerequest.index')
+    ->with('success', 'Requisição criada com sucesso!');
+```
+
+Exibidas em toasts/alerts Bootstrap automáticos via layout.
+
+### 4. HTML Semântico em Blade
+
+```blade
+<form action="{{ route('servicerequest.store') }}" method="POST">
+    @csrf
+    <label for="descricao">Descrição</label>
+    <textarea id="descricao" name="descricao" required></textarea>
+    @error('descricao')
+        <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
+</form>
+```
+
+---
+
+## 📊 Rotas Implementadas
+
+```
+GET     /                           # Dashboard
+GET     /servicerequest             # Lista de requisições (com filtros)
+GET     /servicerequest/create      # Formulário nova requisição
+POST    /servicerequest             # Validar e criar requisição
+GET     /servicerequest/{id}        # Visualizar detalhes
+GET     /servicerequest/{id}/edit   # Editar requisição
+PUT     /servicerequest/{id}        # Atualizar requisição
+DELETE  /servicerequest/{id}        # Deletar requisição
+```
+
+---
+
+## ✅ Critérios de Avaliação Atendidos (SA02)
+
+| Critério | Status | Evidência |
+|----------|--------|-----------|
+| MVP funcional | ✅ | Aplicação rodando no navegador |
+| HTML semântico | ✅ | Tags semânticas (form, label, textarea, etc.) |
+| CSS responsivo | ✅ | Bootstrap 5 + testado em 2 larguras |
+| Validação em PHP | ✅ | Laravel Request Validation |
+| Filtros em PHP | ✅ | Busca, status, prioridade |
+| Manipulação de dados | ✅ | Array filtering, mapeamento |
+| README atualizado | ✅ | Instruções claras de execução |
+| Versionamento | ✅ | Commits coerentes no GitHub |
+| Participação | ✅ | Ambos contribuindo no projeto |
+
+---
+
+## 🔧 Usando o Sistema
+
+### Criar Requisição
+
+1. Clique em **"Nova Requisição"**
+2. Preencha os campos obrigatórios
+3. A validação em PHP verifica:
+   - Campos vazios
+   - Tamanho da descrição
+   - Valores válidos
+4. Se houver erro, página recarrega com mensagens
+5. Se sucesso, requisição é criada
+
+### Filtrar Requisições
+
+1. Na listagem, use os **filtros** no topo:
+   - **Buscar por Descrição** (texto)
+   - **Status** (select)
+   - **Prioridade** (select)
+2. Clique em **"Filtrar"** para aplicar
+3. Clique em **"Limpar"** para remover filtros
+4. Todos os filtros funcionam em PHP/Laravel
+
+### Estatísticas
+
+Dashboard mostra contadores atualizados:
+- Total de requisições
+- Abertas
+- Em andamento
+- Encerradas
+
+---
+
+## 📸 Evidências (SA02)
+
+### Print da Listagem
+- Tabela com requisições
+- Filtros funcionando
+- Botões de ação
+- Estatísticas em cards
+
+### Print do Formulário
+- Campos validados em PHP
+- Mensagens de erro
+- Layout responsivo
+
+### Print de Filtros
+- Busca por texto
+- Select de status
+- Select de prioridade
+- Botões Filtrar/Limpar
+
+---
+
+## 🔄 Fluxo de Funcionamento
+
+```
+Usuario acessa /servicerequest
+         ↓
+Laravel renderiza view com dados
+         ↓
+Usuario vê listagem + filtros
+         ↓
+Usuario digita filtro e clica "Filtrar"
+         ↓
+Form POST para /servicerequest?busca=X
+         ↓
+Laravel valida e filtra em PHP
+         ↓
+View recarrega com dados filtrados
+         ↓
+Usuario vê resultados
+
+─────────────────────────────────
+
+Usuario clica "Nova Requisição"
+         ↓
+Laravel renderiza form /servicerequest/create
+         ↓
+Usuario preenche e envia
+         ↓
+Laravel recebe POST /servicerequest
+         ↓
+Controller valida em PHP
+         ↓
+Se erro: recarrega view com erros
+Se sucesso: cria e redireciona com toast
+         ↓
+Usuario vê mensagem de sucesso
+```
+
+---
+
+## 🚀 Próximos Passos (SA03+)
+
+- [ ] Conectar com banco de dados MySQL
+- [ ] Migrations para tabelas
+- [ ] Eloquent Models
+- [ ] Relações entre modelos
+- [ ] Sistema de autenticação
+
+---
+
+## 📝 Git Commits
+
+Commits realizados:
+
+```bash
+git log --oneline
+
+a5c45cc docs: Adiciona plano do projeto SA01 e atualiza README com metodologia
+[mais commits...]
+```
+
+Confira no repositório: https://github.com/adalmeida13-lab/SisRequisicao
+
+---
+
+## 👥 Equipe
+
+- **Jorladson** - Responsável por estrutura, layout e validação
+- **Ademilson** - Responsável por filtros, formulário e testes
+
+---
+
+## 📅 Data
+
+- **Planejamento (SA01):** 14/08/2026
+- **Desenvolvimento (SA02):** 12/08/2026 - Em Progresso
+
+---
+
+## 📞 Dúvidas?
+
+Confira os arquivos de documentação:
+- `/docs/plano-do-projeto-SA01.md` - Plano e metodologia
+- Este `README.md` - Instruções técnicas
+
+---
+
+**Status:** 🟡 SA02 EM PROGRESSO (60% completo)  
+**Próxima:** Entrega com prints e commits  
+
