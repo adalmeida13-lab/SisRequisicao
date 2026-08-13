@@ -63,35 +63,55 @@ Sistema interno para registrar e acompanhar requisições de serviço entre as �
 
 ---
 
-## 🚀 Como Executar
+## 🚀 Como Executar (Início Rápido)
 
-### 1. Clonar o Repositório
+### Opção 1 — Primeira vez (clone + configuração completa)
 
 ```bash
+# 1. Clone o repositório
 git clone https://github.com/adalmeida13-lab/SisRequisicao.git
 cd SisRequisicao
-```
 
-### 2. Instalar Dependências
+# 2. Checkout no branch de desenvolvimento
+git checkout jorladson
 
-```bash
-composer install
-```
+# 3. Instale dependências
+composer install --ignore-platform-req=ext-fileinfo
 
-### 3. Configurar .env
-
-```bash
+# 4. Configure o ambiente
 cp .env.example .env
 php artisan key:generate
-```
 
-### 4. Rodar o Servidor
+# 5. (Opcional) Banco SQLite — por enquanto dados em memória
+touch database/database.sqlite
+php artisan migrate
 
-```bash
+# 6. Inicie o servidor
 php artisan serve
 ```
 
-Acesse em: **http://localhost:8000**
+**Acesse:** http://localhost:8000/
+
+---
+
+### Opção 2 — Execução rápida (já configurado)
+
+```bash
+cd SisRequisicao
+php artisan serve
+```
+
+**Acesse:** http://localhost:8000/
+
+---
+
+### ⚠️ Observações Importantes
+
+1. **Dados em memória:** As requisições criadas são armazenadas em um array estático. Ao reiniciar o servidor, os dados são resetados. Isso é intencional para o protótipo front-end.
+
+2. **Sem autenticação:** Qualquer pessoa pode criar/editar/excluir requisições. Login será implementado em versão futura com Laravel Breeze.
+
+3. **Branch de trabalho:** Todo o desenvolvimento está no branch `jorladson`. O branch `main` pode estar desatualizado.
 
 ---
 
@@ -650,6 +670,463 @@ Para detalhes completos de cada boa prática aplicada, consulte:
 
 ---
 
-**Status:** 🟡 SA03 IMPLEMENTADA  
-**Próxima:** SA04 - Integração completa  
+**Status:** 🟢 SA03 CONCLUÍDA  
+**Próxima:** SA04 - Organização do Trabalho
 
+---
+
+## 📋 SA04 - Organização do Trabalho e Definição de Prazos
+
+### Objetivo
+
+Aplicar princípios de organização do trabalho e controle de atividades usando quadro de tarefas e plano de execução simples (8 horas).
+
+### Tarefas Implementadas (8 tarefas obrigatórias)
+
+#### Aula 1 (4h) - Implementação de Views e UX
+
+| ID | Tarefa | Prioridade | Responsável | Status | Estimativa |
+|----|--------|-----------|-------------|--------|------------|
+| T01 | Implementar view show.blade.php completa | **MUST** | Jorladson | ✅ Concluída | M (média) |
+| T02 | Implementar view edit.blade.php completa | **MUST** | Ademilson | ✅ Concluída | M (média) |
+| T03 | Criar sistema de mensagens flash | **MUST** | Marcos | ✅ Concluída | P (pequena) |
+| T04 | Melhorar acessibilidade (aria-labels) | **MUST** | Jorladson | ✅ Concluída | P (pequena) |
+
+#### Aula 2 (4h) - Navegação, Documentação e Qualidade
+
+| ID | Tarefa | Prioridade | Responsável | Status | Estimativa |
+|----|--------|-----------|-------------|--------|------------|
+| T05 | Adicionar breadcrumbs em todas as views | **MUST** | Ademilson | ✅ Concluída | M (média) |
+| T06 | Criar documentação técnica (arquitetura) | **MUST** | Marcos | ✅ Concluída | M (média) |
+| T07 | Testar fluxo completo e documentar | **MUST** | Jorladson | ✅ Concluída | G (grande) |
+| T08 | Atualizar README e fazer commit | **MUST** | Equipe | ✅ Concluída | P (pequena) |
+
+### Melhorias Implementadas
+
+✅ **View show.blade.php completa**
+- Card responsivo com informações estruturadas
+- Badges coloridos por status e prioridade
+- Breadcrumbs de navegação
+- Botões de ação (Editar, Excluir, Voltar)
+- Atributos ARIA para acessibilidade
+
+✅ **View edit.blade.php completa**
+- Formulário completo com validação
+- Campos desabilitados (empresa, departamento, data)
+- Campos editáveis (status, prioridade, descrição)
+- Sidebar com dicas de edição
+- Informações de criação/atualização
+
+✅ **Sistema de Mensagens Flash**
+- Componente reutilizável `alert.blade.php`
+- 4 tipos de mensagem (success, error, warning, info)
+- Auto-dismiss após 5 segundos
+- Acessível com aria-live e aria-atomic
+- Ícones Bootstrap Icons
+
+✅ **Melhorias de Acessibilidade (WCAG 2.1)**
+- Atributos `aria-label` em botões de ação
+- `aria-required="true"` em campos obrigatórios
+- `role="alert"` em feedbacks de validação
+- `aria-live="polite"` em mensagens de sucesso
+- `aria-live="assertive"` em mensagens de erro
+- Breadcrumbs com `aria-label="breadcrumb"` e `aria-current="page"`
+
+✅ **Navegação por Breadcrumbs**
+- Estrutura semântica `<nav>`
+- Hierarquia clara (Requisições > Detalhes > Editar)
+- Links funcionais para navegação rápida
+
+✅ **Documentação Técnica Completa**
+- `docs/arquitetura-tecnica-SA04.md` (800+ linhas)
+- Estrutura de pastas documentada
+- Todas as rotas mapeadas
+- Fluxos de criação, listagem, edição e visualização
+- Validações implementadas
+- Padrões de acessibilidade
+- Componentes reutilizáveis
+- Troubleshooting e referências
+
+✅ **Plano de Execução (8h)**
+- `docs/plano-execucao-8h-SA04.md`
+- 8 tarefas priorizadas (Must)
+- Estimativas por tarefa (P/M/G)
+- 3 riscos identificados com ações preventivas
+- Planejado x Realizado documentado
+- 2 ajustes de planejamento registrados
+
+### Ajustes de Planejamento Realizados
+
+**Ajuste 1 (Durante Aula 1):**
+- **O quê:** Tarefa T04 (Acessibilidade) dividida em T04a e T04b
+- **Motivo:** Atraso de 30min na implementação da view edit (complexidade maior que previsto)
+- **Ação:** Jorladson iniciou T04a (views já prontas) e deixou T04b para início da Aula 2
+- **Evidência:** Commits separados para cada view
+
+**Ajuste 2 (Durante Aula 2):**
+- **O quê:** Repriorização - T07 (Testes) executada antes de T06 (Docs)
+- **Motivo:** Testes revelaram bugs que precisaram correção imediata
+- **Ação:** Marcos pausou documentação para corrigir bugs, depois retomou
+- **Evidência:** Commits "fix: corrige validação" antes de "docs: arquitetura técnica"
+
+### Riscos Identificados e Ações Preventivas
+
+| Risco | Ação Preventiva | Status |
+|-------|----------------|--------|
+| **Conflito de edição simultânea** | Cada integrante em arquivos diferentes + commits frequentes | ✅ Evitado |
+| **Falta de tempo para docs** | Reservar 45min finais da Aula 2 para documentação | ✅ Aplicado |
+| **Erros de validação não previstos** | Usar ambiente de testes local + documentar bugs | ✅ Aplicado |
+
+### Arquivos Criados/Modificados
+
+**Novos:**
+- `resources/views/components/alert.blade.php` - Componente de mensagens flash
+- `docs/plano-execucao-8h-SA04.md` - Plano de 8 horas
+- `docs/arquitetura-tecnica-SA04.md` - Documentação técnica completa
+
+**Modificados:**
+- `resources/views/service_requests/show.blade.php` - Reescrito com cards e breadcrumbs
+- `resources/views/service_requests/edit.blade.php` - Reescrito com formulário completo
+- `app/Http/Controllers/ServiceRequestController.php` - Ajustes para compatibilidade
+- `README.md` - Esta seção SA04
+
+### Commits Realizados
+
+```bash
+feat(SA04-Aula1): Implementa views show/edit + mensagens flash
+- T01: View show.blade.php completa com cards e badges
+- T02: View edit.blade.php com formulário estruturado
+- T03: Componente alert.blade.php para mensagens flash
+- T04: Melhorias de acessibilidade (aria-labels, roles)
+- Cria plano de execução (8h) para SA04
+```
+
+### Fluxo de Navegação Implementado
+
+```
+Dashboard
+    ↓
+Listagem (/service-requests)
+    ↓
+Detalhes (/service-requests/{id})
+    ├─→ Editar (/service-requests/{id}/edit)
+    │       ↓
+    │   Atualizar (PUT) → Volta para Detalhes
+    │
+    ├─→ Excluir (DELETE) → Volta para Listagem
+    │
+    └─→ Voltar → Listagem
+
+Nova Requisição (/service-requests/create)
+    ↓
+Criar (POST) → Listagem com mensagem de sucesso
+```
+
+### Cenários de Teste Documentados (12 cenários)
+
+1. ✅ Criar requisição com dados válidos
+2. ✅ Criar requisição com campos vazios (erro esperado)
+3. ✅ Criar requisição com descrição < 10 caracteres (erro)
+4. ✅ Editar requisição alterando status
+5. ✅ Editar requisição alterando prioridade
+6. ✅ Editar requisição com descrição inválida (erro)
+7. ✅ Visualizar detalhes de requisição existente
+8. ✅ Tentar visualizar requisição inexistente (redirect com erro)
+9. ✅ Excluir requisição (confirmação JS)
+10. ✅ Navegar por breadcrumbs
+11. ✅ Verificar mensagens flash após operações
+12. ✅ Testar acessibilidade com leitor de tela (NVDA)
+
+### Evidências de Controle (Quadro de Tarefas)
+
+**Print 1 - Final da Aula 1:**
+- 4 tarefas movidas para "Concluído" (T01, T02, T03, T04a)
+- 1 tarefa em "Fazendo" (T04b - parcial)
+- 3 tarefas em "A Fazer" (T05, T06, T07, T08)
+
+**Print 2 - Final da Aula 2:**
+- 8 tarefas em "Concluído" (100%)
+- 2 ajustes de planejamento registrados
+- Commits finalizados e documentação completa
+
+### Lições Aprendidas
+
+1. **Estimativas mais realistas:** Views complexas devem ser estimadas como "M" ou "G", não "P"
+2. **Importância de testes:** Executar testes ANTES de documentar evita retrabalho
+3. **Comunicação contínua:** Avisar o grupo sobre atrasos permite ajustes rápidos
+4. **Commits atômicos:** Facilita reversão de erros e histórico mais claro
+
+### Documentação Completa
+
+Para detalhes técnicos completos:
+- **Plano de Execução:** `docs/plano-execucao-8h-SA04.md`
+- **Arquitetura Técnica:** `docs/arquitetura-tecnica-SA04.md`
+- **Checklist SA03:** `docs/Checklist-Boas-Praticas-SA03.md`
+
+---
+
+**Status:** 🟢 SA04 CONCLUÍDA  
+**Próxima:** SA05 - Refinamento do Front-End
+
+---
+
+## 🎨 SA05 — Refinamento do Front-End com Qualidade e Padronização
+
+### Objetivo
+
+Refinar o protótipo Front-End com 4 melhorias escolhidas, padronizar validações/mensagens e registrar padrões mínimos do time com rastreabilidade no quadro e no repositório.
+
+### 4 Melhorias Implementadas
+
+#### ✅ M1 — Mensagens de Validação Mais Claras
+
+**Arquivos:** `resources/views/service_requests/create.blade.php`, `resources/views/components/alert.blade.php`
+
+| Antes | Depois |
+|-------|--------|
+| Sem dica acima/abaixo do campo | Dica preventiva `<small id="campo_hint">` abaixo de cada campo |
+| Mensagem de erro genérica (inglês Laravel) | Mensagem + complemento específico em português |
+| Sem legenda de campos obrigatórios | "* Campos obrigatórios" no topo do formulário |
+| Select: "Alta" / "Média" / "Baixa" | Select: "🔴 Alta — urgente" / "🟡 Média — prazo normal" |
+| Sem conexão campo ↔ erro | `aria-describedby` ligando campo → hint + erro |
+
+#### ✅ M2 — Padronização de Layout
+
+**Arquivos:** todas as 4 views de `resources/views/service_requests/`
+
+| Antes | Depois |
+|-------|--------|
+| `index`: `container-fluid` sem padding | Todas: `container py-4` |
+| `create`: `container` sem `py-4` | Padrão único em todas as views |
+| `create` e `index` sem breadcrumb | Breadcrumbs em todas as 4 views |
+| Cards de estatística sem ícone/sombra | Cards com ícone, sombra, altura uniforme |
+| Cabeçalhos inconsistentes | Padrão: `h1.h3` + ícone `text-primary` |
+
+#### ✅ M3 — Responsividade Mínima
+
+**Arquivo:** `public/css/custom-styles.css` (seção 4)
+
+| Antes | Depois |
+|-------|--------|
+| 1 breakpoint (`max-width: 768px`) | 4 breakpoints: 576px / 768px / 992px / 1200px |
+| Cards estatística: 4 colunas em qualquer tela | Mobile: 2 colunas (`row-cols-2`); Desktop: 4 (`row-cols-md-4`) |
+| Todas as colunas da tabela visíveis | Departamento: oculto < 768px; Data: oculto < 992px |
+| Filtros sem adaptação mobile | Filtros em coluna única em mobile (`width: 100%`) |
+
+#### ✅ M4 — Refatoração Leve do CSS
+
+**Arquivo:** `public/css/custom-styles.css` (seções 6, 7, 8)
+
+| Antes | Depois |
+|-------|--------|
+| 5 seletores de foco repetidos | 1 seletor `:focus-visible` moderno |
+| Sem estilo customizado de validação | Seção 7: `.is-invalid` com `border-width: 2px` e flex para ícone |
+| Sem estilo de menu ativo | Seção 8: `.nav-link.active` com `font-weight: 600` e borda inferior |
+| Sem estilo de breadcrumb | Seção 8: breadcrumb com tamanho e cor padronizados |
+
+### Padrões do Time Registrados
+
+Documentados em `docs/decisoes.md`:
+
+**Padrão 1 — Validação e Mensagens:**
+- Campo obrigatório: *"Preencha este campo."*
+- Formato inválido: *"Formato inválido. Verifique e tente novamente."*
+- Sucesso: *"Operação realizada com sucesso!"*
+
+**Padrão 2 — Nomenclatura:**
+- Arquivos: `kebab-case` | Controllers: `PascalCase` | Variáveis PHP: `camelCase`
+- Classes CSS: `kebab-case` | Variáveis CSS: `--kebab-case`
+
+**Padrão 3 — Visual Mínimo:**
+- Container padrão: `container py-4` em todas as views
+- Botão primário: `btn btn-primary` + ícone à esquerda
+- Cores de status: primary/warning/success/secondary para aberta/andamento/encerrada/cancelada
+
+### Arquivos Criados/Modificados (SA05)
+
+**Novos:**
+- `docs/decisoes.md` — Padrões do time (6 seções, nomenclatura, validação, visual, acessibilidade, responsividade)
+- `docs/checklist-qualidade-SA05.md` — Checklist com evidências antes/depois em código
+
+**Modificados:**
+- `resources/views/service_requests/create.blade.php` — M1 (validação) + M2 (layout)
+- `resources/views/service_requests/index.blade.php` — M2 (layout) + M3 (responsividade)
+- `public/css/custom-styles.css` — M3 (responsividade) + M4 (refatoração)
+
+### Commits da SA05
+
+```
+feat(SA05-M1): Mensagens de validação claras + hints acessíveis
+style(SA05-M2): Padroniza container, breadcrumbs e cards
+refactor(SA05-M3+M4): CSS responsivo e refatoração de foco/validação
+docs(SA05): Cria decisoes.md e checklist-qualidade-SA05.md
+```
+
+### Evidências
+
+As evidências são descrições objetivas antes/depois em código, no arquivo:
+`docs/checklist-qualidade-SA05.md`
+
+(conforme permitido pelo PDF da SA05: *"print antes/depois **ou** descrição objetiva"*)
+
+### Documentação Completa
+
+- **Checklist SA05:** `docs/checklist-qualidade-SA05.md`
+- **Padrões do time:** `docs/decisoes.md`
+
+---
+
+**Status:** 🟢 SA05 CONCLUÍDA  
+---
+
+## 📦 SA06 — Entrega Final do Protótipo Front-End
+
+### Objetivo
+
+Consolidar e entregar o protótipo Front-End garantindo execução no navegador, evidências de funcionamento, documentação mínima e rastreabilidade final.
+
+### Itens Entregues
+
+#### ✅ 1. Protótipo Executável
+
+**Status:** Rodando em `http://localhost:8000/service-requests`
+
+**Verificado:**
+- Abre no navegador sem erro visível
+- Console do navegador sem erros críticos (F12)
+- Servidor PHP inicia corretamente (`php artisan serve`)
+- CSS e Bootstrap carregam normalmente
+
+#### ✅ 2. Fluxo Demonstrado
+
+**Navegação:**
+- Listagem → Criar → Detalhes → Editar → Voltar (circular)
+- Breadcrumbs clicáveis em todas as views
+- Filtros funcionais (busca, status, prioridade)
+
+**Validação:**
+- Campos obrigatórios bloqueados com mensagem em português
+- Borda vermelha + ícone + texto complementar nos erros
+- Mensagens de sucesso (alert verde) após criar/editar
+
+**Interação principal:**
+- **Adicionar requisição** — formulário completo com validação PHP/Laravel
+- **Visualizar detalhes** — card com badges coloridos (status/prioridade)
+- **Editar requisição** — alterar status, prioridade e descrição
+- **Excluir requisição** — botão vermelho com confirmação JavaScript
+
+#### ✅ 3. Evidências de Funcionamento
+
+Todas as evidências estão descritas objetivamente em:  
+**`docs/checklist-entrega-SA06.md`**
+
+**O que as evidências mostram:**
+1. Listagem com cards de estatística (4 cards + tabela responsiva)
+2. Formulário de criação com validação (dicas + erros + hints acessíveis)
+3. Mensagem de sucesso (alert verde dismissível)
+4. Responsividade mobile (cards 2 colunas, tabela com colunas ocultas)
+
+#### ✅ 4. Organização do Repositório
+
+**Estrutura:**
+```
+SisRequisicao/
+├── app/Http/Controllers/          — Lógica de negócio
+├── resources/views/               — Blade templates
+│   ├── service_requests/          — CRUD completo
+│   ├── components/                — alert.blade.php
+│   └── layouts/                   — app.blade.php
+├── public/
+│   ├── css/custom-styles.css      — CSS customizado + responsividade
+│   ├── js/                        — JavaScript (futuro)
+│   └── images/                    — Imagens (futuro)
+├── docs/                          — Documentação completa (6 arquivos)
+└── README.md                      — Este arquivo
+```
+
+**Commits finais (SA01–SA06):**
+- SA01: 2 commits (plano do projeto)
+- SA02: 3 commits (formulário + listagem)
+- SA03: 2 commits (organização CSS/JS/Images)
+- SA04: 2 commits (views show/edit + docs técnica)
+- SA05: 4 commits (validação + layout + responsividade + refatoração)
+- SA06: 1 commit (checklist de entrega + README final)
+
+**Total:** ~14 commits no branch `jorladson`
+
+#### ✅ 5. README e Documentação
+
+**README contém:**
+- ✅ Objetivo do protótipo (1º parágrafo)
+- ✅ Como abrir/rodar (seção "Como Executar")
+- ✅ Funcionalidades entregues (seção "Funcionalidades Implementadas")
+- ✅ Integrantes do grupo (Jorladson, Ademilson, Marcos)
+- ✅ Stack tecnológica (PHP 8.3, Laravel 13, Bootstrap 5)
+
+**Documentação adicional:**
+- `docs/checklist-entrega-SA06.md` — Checklist de entrega (1 página)
+- `docs/checklist-qualidade-SA05.md` — Checklist de qualidade com evidências antes/depois
+- `docs/decisoes.md` — Padrões do time (6 seções)
+- `docs/arquitetura-tecnica-SA04.md` — Arquitetura técnica (800+ linhas)
+- `docs/plano-execucao-8h-SA04.md` — Plano de execução 8h
+- `docs/plano-do-projeto-SA01.md` — Plano do projeto
+
+#### ✅ 6. Quadro de Tarefas
+
+**Link:** https://github.com/users/Jorladsonp/projects/2/views/1
+
+**Status:** Todas as tarefas das SAs 01–06 concluídas ✅
+
+**Tarefas SA06 (8 tarefas):**
+1. T01 — Checagem de execução e funcionamento
+2. T02 — Ajustes finais (mensagens, links, validação)
+3. T03 — Gerar evidências (prints ou descrição objetiva)
+4. T04 — Criar checklist de entrega (1 página)
+5. T05 — Atualizar README com instruções de execução
+6. T06 — Fechar rastreabilidade (quadro + commits)
+7. T07 — Preparar apresentação curta (3 minutos)
+8. T08 — Upload no AVA e conclusão
+
+---
+
+### Resumo de Funcionalidades Finais
+
+| Categoria | Funcionalidades |
+|-----------|----------------|
+| **Navegação** | Listagem, Criar, Visualizar, Editar, Excluir, Filtrar |
+| **Validação** | PHP/Laravel server-side, mensagens em português, dicas preventivas |
+| **UX** | Mensagens flash, breadcrumbs, badges coloridos, confirmação de exclusão |
+| **Acessibilidade** | ARIA labels, `aria-required`, `aria-describedby`, `role="alert"` |
+| **Responsividade** | 4 breakpoints, cards 2/4 colunas, tabela com scroll horizontal |
+| **Padrões** | Nomes (kebab-case/camelCase), visual (container py-4), validação |
+
+---
+
+### Pendências Conhecidas
+
+| Pendência | Impacto | Observação |
+|-----------|---------|-----------|
+| Dados em memória (array estático) | **Baixo** | Dados são perdidos ao reiniciar. Migração para SQLite planejada. |
+| Sem autenticação de usuário | **Médio** | Qualquer um pode criar/editar/excluir. Login futuro com Laravel Breeze. |
+
+**Essas pendências são intencionais** para manter o escopo de protótipo front-end (SA01–SA06).
+
+---
+
+### Como Demonstrar o Protótipo (Apresentação 3min)
+
+1. **Abrir navegador:** `http://localhost:8000/service-requests`
+2. **Mostrar listagem:** Cards de estatística + tabela com requisições
+3. **Criar requisição:** Clicar "Nova Requisição" → Preencher → Submeter vazio (erro) → Preencher correto (sucesso)
+4. **Visualizar detalhes:** Clicar no ícone 👁️ de uma requisição
+5. **Editar requisição:** Alterar status ou prioridade → Salvar
+6. **Filtrar:** Buscar por texto ou status
+7. **Responsividade:** Redimensionar janela (DevTools) para 390px
+
+**Evidências:** Apontar `docs/checklist-entrega-SA06.md` e `docs/checklist-qualidade-SA05.md`
+
+---
+
+**Status:** 🟢 SA06 CONCLUÍDA — Protótipo Final Entregue  
+**Branch final:** `jorladson`  
+**Equipe:** Jorladson, Ademilson

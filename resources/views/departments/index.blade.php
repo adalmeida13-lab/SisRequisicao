@@ -14,7 +14,7 @@
         Departamentos Excluídos
     </a>
     <div class="card">
-        <div class="card-body"></div>
+        <div class="card-body">
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -74,4 +74,3 @@
         </div>
     </div>
 @endsection
-

@@ -13,13 +13,20 @@ class ServiceRequest extends Model
     protected $table = 'requests';
     protected $fillable = [
         'company_id',
+        'department_id',
         'user_id',
         'date_opened',
         'date_closed',
         'description',
+        'priority',
         'status',
         'feedback',
         'feedback_comment'
+    ];
+
+    protected $casts = [
+        'date_opened' => 'datetime',
+        'date_closed' => 'datetime',
     ];
     public function company()
     {
@@ -28,6 +35,11 @@ class ServiceRequest extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function department()
+    {
+        return $this->belongsTo(Department::class);
     }
 
 

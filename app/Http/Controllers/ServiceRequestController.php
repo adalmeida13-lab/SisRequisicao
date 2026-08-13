@@ -2,242 +2,261 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
+use App\Models\Department;
+use App\Models\ServiceRequest;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class ServiceRequestController extends Controller
 {
-    // Dados simulados em memória (sem banco de dados ainda)
-    private static $requisicoes = [];
+    private const STATUS_TO_DATABASE = [
+        'aberta' => 'open',
+        'em_andamento' => 'in_progress',
+        'encerrada' => 'closed',
+        'cancelada' => 'canceled',
+    ];
 
-    public function __construct()
-    {
-        // Simular alguns dados iniciais
-        if (empty(self::$requisicoes)) {
-            self::$requisicoes = [
-                [
-                    'id' => 1,
-                    'empresa' => 'Empresa A',
-                    'departamento' => 'TI',
-                    'descricao' => 'Instalar softwares no computador da sala 101',
-                    'prioridade' => 'alta',
-                    'status' => 'aberta',
-                    'data' => '2026-08-12'
-                ],
-                [
-                    'id' => 2,
-                    'empresa' => 'Empresa B',
-                    'departamento' => 'RH',
-                    'descricao' => 'Configurar acesso de novo funcionário ao sistema',
-                    'prioridade' => 'media',
-                    'status' => 'em_andamento',
-                    'data' => '2026-08-11'
-                ],
-                [
-                    'id' => 3,
-                    'empresa' => 'Empresa C',
-                    'departamento' => 'Financeiro',
-                    'descricao' => 'Relatório mensal de despesas departamentais',
-                    'prioridade' => 'baixa',
-                    'status' => 'encerrada',
-                    'data' => '2026-08-10'
-                ]
-            ];
-        }
-    }
+    private const STATUS_FROM_DATABASE = [
+        'open' => 'aberta',
+        'in_progress' => 'em_andamento',
+        'closed' => 'encerrada',
+        'canceled' => 'cancelada',
+    ];
 
-    /**
-     * Listagem de requisições com filtros
-     */
     public function index(Request $request)
     {
-        $query = self::$requisicoes;
+        $query = ServiceRequest::with(['company', 'department', 'user'])
+            ->latest('date_opened');
 
-        // FILTRO POR BUSCA (descrição)
-        $busca = $request->get('busca');
-        if ($busca) {
-            $query = array_filter($query, function ($req) use ($busca) {
-                return stripos($req['descricao'], $busca) !== false;
-            });
+        if ($request->filled('busca')) {
+            $query->where('description', 'like', '%' . $request->string('busca') . '%');
         }
 
-        // FILTRO POR STATUS
-        $status = $request->get('status');
-        if ($status) {
-            $query = array_filter($query, function ($req) use ($status) {
-                return $req['status'] === $status;
-            });
+        if ($request->filled('status') && isset(self::STATUS_TO_DATABASE[$request->status])) {
+            $query->where('status', self::STATUS_TO_DATABASE[$request->status]);
         }
 
-        // FILTRO POR PRIORIDADE
-        $prioridade = $request->get('prioridade');
-        if ($prioridade) {
-            $query = array_filter($query, function ($req) use ($prioridade) {
-                return $req['prioridade'] === $prioridade;
-            });
+        if ($request->filled('prioridade') && in_array($request->prioridade, ['baixa', 'media', 'alta'], true)) {
+            $query->where('priority', $request->prioridade);
         }
 
-        // Converter arrays para objetos para compatibilidade com Blade
-        $requisicoes = collect($query)->map(function ($req) {
-            return (object) $req;
-        })->toArray();
-
-        // ESTATÍSTICAS
-        $total = count(self::$requisicoes);
-        $abertas = count(array_filter(self::$requisicoes, fn($r) => $r['status'] === 'aberta'));
-        $emAndamento = count(array_filter(self::$requisicoes, fn($r) => $r['status'] === 'em_andamento'));
-        $encerradas = count(array_filter(self::$requisicoes, fn($r) => $r['status'] === 'encerrada'));
+        $requisicoes = $query->get()->map(fn(ServiceRequest $item) => $this->toViewModel($item))->all();
 
         return view('service_requests.index', [
             'requisicoes' => $requisicoes,
-            'total' => $total,
-            'abertas' => $abertas,
-            'emAndamento' => $emAndamento,
-            'encerradas' => $encerradas
+            'total' => ServiceRequest::count(),
+            'abertas' => ServiceRequest::where('status', 'open')->count(),
+            'emAndamento' => ServiceRequest::where('status', 'in_progress')->count(),
+            'encerradas' => ServiceRequest::where('status', 'closed')->count(),
         ]);
     }
 
-    /**
-     * Formulário para criar nova requisição
-     */
-    public function create()
+    public function dashboard()
     {
-        return view('service_requests.create');
+        $recentRequests = ServiceRequest::with(['company', 'department', 'user'])
+            ->latest('date_opened')
+            ->take(5)
+            ->get()
+            ->map(fn(ServiceRequest $item) => $this->toViewModel($item));
+
+        return view('dashboard', [
+            'total' => ServiceRequest::count(),
+            'abertas' => ServiceRequest::where('status', 'open')->count(),
+            'emAndamento' => ServiceRequest::where('status', 'in_progress')->count(),
+            'encerradas' => ServiceRequest::where('status', 'closed')->count(),
+            'canceladas' => ServiceRequest::where('status', 'canceled')->count(),
+            'recentRequests' => $recentRequests,
+        ]);
     }
 
-    /**
-     * Validar e salvar nova requisição
-     */
+    public function create()
+    {
+        $companies = Company::query()
+            ->where('is_active', true)
+            ->orderBy('name')
+            ->get();
+
+        $departments = Department::query()
+            ->where('is_active', true)
+            ->with('company')
+            ->orderBy('name')
+            ->get();
+
+        return view('service_requests.create', compact('companies', 'departments'));
+    }
+
     public function store(Request $request)
     {
-        // VALIDAÇÃO EM PHP/LARAVEL
         $validated = $request->validate(
             [
-                'empresa_id' => 'required|integer|min:1',
-                'departamento_id' => 'required|integer|min:1',
-                'prioridade' => 'required|in:baixa,media,alta',
-                'descricao' => 'required|string|min:10|max:500'
+                'empresa_id' => [
+                    'required',
+                    'integer',
+                    Rule::exists('companies', 'id')->where(fn($query) => $query->where('is_active', true)),
+                ],
+                'departamento_id' => [
+                    'required',
+                    'integer',
+                    Rule::exists('departments', 'id')->where(fn($query) => $query->where('is_active', true)),
+                ],
+                'prioridade' => ['required', 'in:baixa,media,alta'],
+                'descricao' => ['required', 'string', 'min:10', 'max:500'],
             ],
             [
-                'empresa_id.required' => 'Empresa é obrigatória',
-                'empresa_id.integer' => 'Empresa inválida',
-                'departamento_id.required' => 'Departamento é obrigatório',
-                'departamento_id.integer' => 'Departamento inválido',
-                'prioridade.required' => 'Prioridade é obrigatória',
-                'prioridade.in' => 'Prioridade deve ser: baixa, média ou alta',
-                'descricao.required' => 'Descrição é obrigatória',
-                'descricao.min' => 'Descrição deve ter no mínimo 10 caracteres',
-                'descricao.max' => 'Descrição não pode exceder 500 caracteres'
+                'empresa_id.required' => 'Empresa é obrigatória.',
+                'empresa_id.exists' => 'Selecione uma empresa ativa cadastrada.',
+                'departamento_id.required' => 'Departamento é obrigatório.',
+                'departamento_id.exists' => 'Selecione um departamento ativo cadastrado.',
+                'prioridade.required' => 'Prioridade é obrigatória.',
+                'descricao.required' => 'Descrição é obrigatória.',
+                'descricao.min' => 'Descrição deve ter no mínimo 10 caracteres.',
+                'descricao.max' => 'Descrição não pode exceder 500 caracteres.',
             ]
         );
 
-        // Dados de mapeamento
-        $empresas = ['1' => 'Empresa A', '2' => 'Empresa B', '3' => 'Empresa C'];
-        $departamentos = ['1' => 'TI', '2' => 'RH', '3' => 'Financeiro', '4' => 'Operações'];
+        $userId = auth()->id() ?: User::query()->value('id');
 
-        // CRIAR NOVA REQUISIÇÃO
-        $novaRequisicao = [
-            'id' => count(self::$requisicoes) + 1,
-            'empresa' => $empresas[$request->empresa_id] ?? 'N/A',
-            'departamento' => $departamentos[$request->departamento_id] ?? 'N/A',
-            'descricao' => $validated['descricao'],
-            'prioridade' => $validated['prioridade'],
-            'status' => 'aberta',
-            'data' => date('Y-m-d')
-        ];
-
-        // Adicionar ao array
-        self::$requisicoes[] = $novaRequisicao;
-
-        // MENSAGEM DE SUCESSO
-        return redirect()
-            ->route('servicerequest.index')
-            ->with('success', 'Requisição criada com sucesso! Você pode acompanhar seu status na listagem.');
-    }
-
-    /**
-     * Visualizar detalhes da requisição
-     */
-    public function show($id)
-    {
-        $requisicao = collect(self::$requisicoes)->firstWhere('id', $id);
-
-        if (!$requisicao) {
-            return redirect()
-                ->route('servicerequest.index')
-                ->with('error', 'Requisição não encontrada');
+        if (!$userId) {
+            return back()
+                ->withInput()
+                ->with('error', 'Cadastre um usuário antes de abrir uma requisição.');
         }
 
-        return view('service_requests.show', ['requisicao' => $requisicao]);
-    }
-
-    /**
-     * Formulário para editar requisição
-     */
-    public function edit($id)
-    {
-        $requisicao = collect(self::$requisicoes)->firstWhere('id', $id);
-
-        if (!$requisicao) {
-            return redirect()
-                ->route('servicerequest.index')
-                ->with('error', 'Requisição não encontrada');
-        }
-
-        return view('service_requests.edit', ['requisicao' => $requisicao]);
-    }
-
-    /**
-     * Atualizar requisição
-     */
-    public function update(Request $request, $id)
-    {
-        $requisicao = collect(self::$requisicoes)->firstWhere('id', $id);
-
-        if (!$requisicao) {
-            return redirect()
-                ->route('servicerequest.index')
-                ->with('error', 'Requisição não encontrada');
-        }
-
-        // VALIDAÇÃO
-        $validated = $request->validate([
-            'prioridade' => 'required|in:baixa,media,alta',
-            'descricao' => 'required|string|min:10|max:500',
-            'status' => 'required|in:aberta,em_andamento,encerrada,cancelada'
+        ServiceRequest::create([
+            'company_id' => $validated['empresa_id'],
+            'department_id' => $validated['departamento_id'],
+            'user_id' => $userId,
+            'date_opened' => now(),
+            'description' => $validated['descricao'],
+            'priority' => $validated['prioridade'],
+            'status' => 'open',
         ]);
 
-        // Atualizar
-        $index = array_search($requisicao, self::$requisicoes);
-        self::$requisicoes[$index]['prioridade'] = $validated['prioridade'];
-        self::$requisicoes[$index]['descricao'] = $validated['descricao'];
-        self::$requisicoes[$index]['status'] = $validated['status'];
+        return redirect()
+            ->route('servicerequest.index')
+            ->with('success', 'Requisição criada com sucesso!');
+    }
+
+    public function show($id)
+    {
+        $serviceRequest = ServiceRequest::with(['company', 'department', 'user'])->find($id);
+
+        if (!$serviceRequest) {
+            return redirect()->route('servicerequest.index')->with('error', 'Requisição não encontrada.');
+        }
+
+        return view('service_requests.show', [
+            'serviceRequest' => $this->toViewModel($serviceRequest),
+        ]);
+    }
+
+    public function edit($id)
+    {
+        $serviceRequest = ServiceRequest::with(['company', 'department', 'user'])->find($id);
+
+        if (!$serviceRequest) {
+            return redirect()->route('servicerequest.index')->with('error', 'Requisição não encontrada.');
+        }
+
+        return view('service_requests.edit', [
+            'serviceRequest' => $this->toViewModel($serviceRequest),
+        ]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $serviceRequest = ServiceRequest::find($id);
+
+        if (!$serviceRequest) {
+            return redirect()->route('servicerequest.index')->with('error', 'Requisição não encontrada.');
+        }
+
+        $validated = $request->validate([
+            'prioridade' => ['required', 'in:baixa,media,alta'],
+            'descricao' => ['required', 'string', 'min:10', 'max:500'],
+            'status' => ['required', Rule::in(array_keys(self::STATUS_TO_DATABASE))],
+        ]);
+
+        $databaseStatus = self::STATUS_TO_DATABASE[$validated['status']];
+
+        $serviceRequest->update([
+            'priority' => $validated['prioridade'],
+            'description' => $validated['descricao'],
+            'status' => $databaseStatus,
+            'date_closed' => $databaseStatus === 'closed' ? now() : null,
+        ]);
 
         return redirect()
             ->route('servicerequest.show', $id)
             ->with('success', 'Requisição atualizada com sucesso!');
     }
 
-    /**
-     * Deletar requisição
-     */
     public function destroy($id)
     {
-        $requisicao = collect(self::$requisicoes)->firstWhere('id', $id);
+        $serviceRequest = ServiceRequest::find($id);
 
-        if (!$requisicao) {
-            return redirect()
-                ->route('servicerequest.index')
-                ->with('error', 'Requisição não encontrada');
+        if (!$serviceRequest) {
+            return redirect()->route('servicerequest.index')->with('error', 'Requisição não encontrada.');
         }
 
-        // Remover do array
-        self::$requisicoes = array_filter(
-            self::$requisicoes,
-            fn($req) => $req['id'] !== $id
-        );
+        $serviceRequest->delete();
 
         return redirect()
             ->route('servicerequest.index')
-            ->with('success', 'Requisição deletada com sucesso!');
+            ->with('success', 'Requisição excluída com sucesso.');
+    }
+
+    public function trashed()
+    {
+        $serviceRequests = ServiceRequest::onlyTrashed()
+            ->with(['company', 'department', 'user'])
+            ->latest('date_opened')
+            ->get()
+            ->map(fn(ServiceRequest $item) => $this->toViewModel($item));
+
+        return view('service_requests.trashed', compact('serviceRequests'));
+    }
+
+    public function restore($id)
+    {
+        $serviceRequest = ServiceRequest::onlyTrashed()->find($id);
+
+        if (!$serviceRequest) {
+            return redirect()->route('service_requests.trashed')->with('error', 'Requisição não encontrada.');
+        }
+
+        $serviceRequest->restore();
+
+        return redirect()->route('service_requests.trashed')->with('success', 'Requisição restaurada com sucesso.');
+    }
+
+    public function forceDelete($id)
+    {
+        $serviceRequest = ServiceRequest::onlyTrashed()->find($id);
+
+        if (!$serviceRequest) {
+            return redirect()->route('service_requests.trashed')->with('error', 'Requisição não encontrada.');
+        }
+
+        $serviceRequest->forceDelete();
+
+        return redirect()->route('service_requests.trashed')->with('success', 'Requisição excluída permanentemente.');
+    }
+
+    private function toViewModel(ServiceRequest $serviceRequest): object
+    {
+        return (object) [
+            'id' => $serviceRequest->id,
+            'empresa' => $serviceRequest->company?->name ?? 'N/A',
+            'departamento' => $serviceRequest->department?->name ?? 'N/A',
+            'descricao' => $serviceRequest->description,
+            'prioridade' => $serviceRequest->priority ?? 'media',
+            'status' => self::STATUS_FROM_DATABASE[$serviceRequest->status] ?? 'aberta',
+            'data' => $serviceRequest->date_opened?->format('Y-m-d') ?? $serviceRequest->date_opened,
+            'created_at' => $serviceRequest->created_at,
+            'updated_at' => $serviceRequest->updated_at,
+        ];
     }
 }

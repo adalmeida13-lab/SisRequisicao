@@ -14,43 +14,7 @@
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
-    <style>
-        body {
-            background: #f5f7fa;
-        }
-
-        .sidebar {
-            min-height: 100vh;
-            background: #212529;
-        }
-
-        .sidebar a {
-            color: #ced4da;
-            text-decoration: none;
-            padding: 12px;
-            display: block;
-            border-radius: 8px;
-            margin-bottom: 5px;
-        }
-
-        .sidebar a:hover {
-            background: #343a40;
-            color: #fff;
-        }
-
-        .content {
-            padding: 25px;
-        }
-
-        .card {
-            border: none;
-            box-shadow: 0 0 10px rgba(0, 0, 0, .05);
-        }
-
-        .navbar-brand {
-            font-weight: bold;
-        }
-    </style>
+    <link href="{{ asset('css/custom-styles.css') }}" rel="stylesheet">
 
     @stack('styles')
 
@@ -59,10 +23,10 @@
 
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+    <nav class="navbar navbar-expand-lg navbar-dark app-navbar shadow-sm">
         <div class="container-fluid">
 
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="{{ route('dashboard') }}">
                 <i class="bi bi-clipboard-check"></i>
                 SISREQUISIÇÃO
             </a>
@@ -70,7 +34,7 @@
             <div class="ms-auto">
 
                 @auth
-                    <span class="text-white me-3">
+                    <span class="user-chip text-white me-3">
                         <i class="bi bi-person-circle"></i>
                         {{ Auth::user()->name }}
                     </span>
@@ -92,47 +56,54 @@
 
     <div class="container-fluid">
 
-        <div class="row">
+        <div class="row app-shell">
 
-            <div class="col-md-2 sidebar p-3">
+            <aside class="col-md-2 sidebar p-3">
 
-                <h6 class="text-light mb-3">
-                    MENU
-                </h6>
+                <div class="sidebar-label">Navegação</div>
 
-                <a href="#">
+                <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}" aria-current="{{ request()->routeIs('dashboard') ? 'page' : 'false' }}">
                     <i class="bi bi-speedometer2"></i>
                     Dashboard
                 </a>
 
-                <a href="{{ route('servicerequest.index') }}">
+                <a href="{{ route('servicerequest.index') }}" class="{{ request()->routeIs('servicerequest.index', 'servicerequest.show', 'servicerequest.edit') ? 'active' : '' }}" aria-current="{{ request()->routeIs('servicerequest.index', 'servicerequest.show', 'servicerequest.edit') ? 'page' : 'false' }}">
                     <i class="bi bi-list-task"></i>
                     Requisições
                 </a>
 
-                <a href="{{ route('servicerequest.create') }}">
+                <a href="{{ route('servicerequest.create') }}" class="{{ request()->routeIs('servicerequest.create') ? 'active' : '' }}" aria-current="{{ request()->routeIs('servicerequest.create') ? 'page' : 'false' }}">
                     <i class="bi bi-plus-circle"></i>
                     Nova Requisição
                 </a>
 
-                <a href="{{ route('users.index') }}">
+                <a href="{{ route('users.index') }}" class="{{ request()->routeIs('users.*') ? 'active' : '' }}" aria-current="{{ request()->routeIs('users.*') ? 'page' : 'false' }}">
                     <i class="bi bi-people"></i>
                     Usuários
                 </a>
-                <a href="{{ route('companies.index') }}">
+                <a href="{{ route('companies.index') }}" class="{{ request()->routeIs('companies.*') ? 'active' : '' }}" aria-current="{{ request()->routeIs('companies.*') ? 'page' : 'false' }}">
                     <i class="bi bi-building"></i>
                     Empresas
                 </a>
-                <a href="{{ route('departments.index') }}">
+                <a href="{{ route('departments.index') }}" class="{{ request()->routeIs('departments.*') ? 'active' : '' }}" aria-current="{{ request()->routeIs('departments.*') ? 'page' : 'false' }}">
                     <i class="bi bi-diagram-3"></i>
                     Departamentos
                 </a>
 
-            </div>
+            </aside>
 
-            <div class="col-md-10 content">
+            <main class="col-md-10 content">
 
-                <div class="container-fluid">
+                <div class="container-fluid content-inner">
+
+                    @hasSection('page-title')
+                        <div class="page-header">
+                            <div>
+                                <div class="page-eyebrow">Sistema de requisições</div>
+                                <h1 class="page-title">@yield('page-title')</h1>
+                            </div>
+                        </div>
+                    @endif
 
                     @if ($errors->any())
 
@@ -158,7 +129,7 @@
 
                 </div>
 
-            </div>
+            </main>
 
         </div>
 

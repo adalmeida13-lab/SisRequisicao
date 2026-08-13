@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('page-title')
+    Criar Departamento
+@endsection
+
 @section('content')
     <div class="container">
         <h1>Criar Departamento</h1>
@@ -32,4 +36,3 @@
         </form>
     </div>
 @endsection
-
