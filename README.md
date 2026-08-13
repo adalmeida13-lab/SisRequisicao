@@ -846,5 +846,116 @@ Para detalhes técnicos completos:
 ---
 
 **Status:** 🟢 SA04 CONCLUÍDA  
-**Próxima:** SA05 - Integração com Banco de Dados  
+**Próxima:** SA05 - Refinamento do Front-End
+
+---
+
+## 🎨 SA05 — Refinamento do Front-End com Qualidade e Padronização
+
+### Objetivo
+
+Refinar o protótipo Front-End com 4 melhorias escolhidas, padronizar validações/mensagens e registrar padrões mínimos do time com rastreabilidade no quadro e no repositório.
+
+### 4 Melhorias Implementadas
+
+#### ✅ M1 — Mensagens de Validação Mais Claras
+
+**Arquivos:** `resources/views/service_requests/create.blade.php`, `resources/views/components/alert.blade.php`
+
+| Antes | Depois |
+|-------|--------|
+| Sem dica acima/abaixo do campo | Dica preventiva `<small id="campo_hint">` abaixo de cada campo |
+| Mensagem de erro genérica (inglês Laravel) | Mensagem + complemento específico em português |
+| Sem legenda de campos obrigatórios | "* Campos obrigatórios" no topo do formulário |
+| Select: "Alta" / "Média" / "Baixa" | Select: "🔴 Alta — urgente" / "🟡 Média — prazo normal" |
+| Sem conexão campo ↔ erro | `aria-describedby` ligando campo → hint + erro |
+
+#### ✅ M2 — Padronização de Layout
+
+**Arquivos:** todas as 4 views de `resources/views/service_requests/`
+
+| Antes | Depois |
+|-------|--------|
+| `index`: `container-fluid` sem padding | Todas: `container py-4` |
+| `create`: `container` sem `py-4` | Padrão único em todas as views |
+| `create` e `index` sem breadcrumb | Breadcrumbs em todas as 4 views |
+| Cards de estatística sem ícone/sombra | Cards com ícone, sombra, altura uniforme |
+| Cabeçalhos inconsistentes | Padrão: `h1.h3` + ícone `text-primary` |
+
+#### ✅ M3 — Responsividade Mínima
+
+**Arquivo:** `public/css/custom-styles.css` (seção 4)
+
+| Antes | Depois |
+|-------|--------|
+| 1 breakpoint (`max-width: 768px`) | 4 breakpoints: 576px / 768px / 992px / 1200px |
+| Cards estatística: 4 colunas em qualquer tela | Mobile: 2 colunas (`row-cols-2`); Desktop: 4 (`row-cols-md-4`) |
+| Todas as colunas da tabela visíveis | Departamento: oculto < 768px; Data: oculto < 992px |
+| Filtros sem adaptação mobile | Filtros em coluna única em mobile (`width: 100%`) |
+
+#### ✅ M4 — Refatoração Leve do CSS
+
+**Arquivo:** `public/css/custom-styles.css` (seções 6, 7, 8)
+
+| Antes | Depois |
+|-------|--------|
+| 5 seletores de foco repetidos | 1 seletor `:focus-visible` moderno |
+| Sem estilo customizado de validação | Seção 7: `.is-invalid` com `border-width: 2px` e flex para ícone |
+| Sem estilo de menu ativo | Seção 8: `.nav-link.active` com `font-weight: 600` e borda inferior |
+| Sem estilo de breadcrumb | Seção 8: breadcrumb com tamanho e cor padronizados |
+
+### Padrões do Time Registrados
+
+Documentados em `docs/decisoes.md`:
+
+**Padrão 1 — Validação e Mensagens:**
+- Campo obrigatório: *"Preencha este campo."*
+- Formato inválido: *"Formato inválido. Verifique e tente novamente."*
+- Sucesso: *"Operação realizada com sucesso!"*
+
+**Padrão 2 — Nomenclatura:**
+- Arquivos: `kebab-case` | Controllers: `PascalCase` | Variáveis PHP: `camelCase`
+- Classes CSS: `kebab-case` | Variáveis CSS: `--kebab-case`
+
+**Padrão 3 — Visual Mínimo:**
+- Container padrão: `container py-4` em todas as views
+- Botão primário: `btn btn-primary` + ícone à esquerda
+- Cores de status: primary/warning/success/secondary para aberta/andamento/encerrada/cancelada
+
+### Arquivos Criados/Modificados (SA05)
+
+**Novos:**
+- `docs/decisoes.md` — Padrões do time (6 seções, nomenclatura, validação, visual, acessibilidade, responsividade)
+- `docs/checklist-qualidade-SA05.md` — Checklist com evidências antes/depois em código
+
+**Modificados:**
+- `resources/views/service_requests/create.blade.php` — M1 (validação) + M2 (layout)
+- `resources/views/service_requests/index.blade.php` — M2 (layout) + M3 (responsividade)
+- `public/css/custom-styles.css` — M3 (responsividade) + M4 (refatoração)
+
+### Commits da SA05
+
+```
+feat(SA05-M1): Mensagens de validação claras + hints acessíveis
+style(SA05-M2): Padroniza container, breadcrumbs e cards
+refactor(SA05-M3+M4): CSS responsivo e refatoração de foco/validação
+docs(SA05): Cria decisoes.md e checklist-qualidade-SA05.md
+```
+
+### Evidências
+
+As evidências são descrições objetivas antes/depois em código, no arquivo:
+`docs/checklist-qualidade-SA05.md`
+
+(conforme permitido pelo PDF da SA05: *"print antes/depois **ou** descrição objetiva"*)
+
+### Documentação Completa
+
+- **Checklist SA05:** `docs/checklist-qualidade-SA05.md`
+- **Padrões do time:** `docs/decisoes.md`
+
+---
+
+**Status:** 🟢 SA05 CONCLUÍDA  
+**Próxima:** SA06 - Apresentação Final  
 
