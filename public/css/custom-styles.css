@@ -1,9 +1,10 @@
 /**
  * SisRequisição - Estilos Customizados
  * Arquivo: custom-styles.css
- * Descrição: Estilos reutilizáveis e bem organizados
- * Data: 12/08/2026
+ * Descrição: Estilos reutilizáveis, padronizados e responsivos
+ * Última atualização: 13/08/2026
  * SA03: Padronização e Boas Práticas
+ * SA05: Responsividade mínima + Refatoração leve
  */
 
 /* ========================================
@@ -135,39 +136,88 @@
 }
 
 /* ========================================
-   4. RESPONSIVIDADE
+   4. RESPONSIVIDADE — SA05-M3
+   Testado em: 390px (mobile), 768px (tablet), 1366px (desktop)
    ======================================== */
 
-/* Mobile First - até 768px */
-@media (max-width: 768px) {
+/* --- Mobile: até 576px (smartphones) --- */
+@media (max-width: 576px) {
+    /* Container com padding lateral adequado */
+    .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    /* Títulos menores em mobile */
+    h1.h3 {
+        font-size: 1.25rem;
+    }
+
+    /* Cards de estatística: 2 colunas */
+    .row-cols-2 .card-stat .fs-3 {
+        font-size: 1.5rem !important;
+    }
+
+    /* Formulário: filtros em coluna única */
+    .filter-section .row > [class*="col-"] {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+
+    /* Botões de ação: empilhados */
+    .btn-group-sm .btn {
+        padding: 0.3rem 0.5rem;
+        font-size: 0.8rem;
+    }
+
+    /* Breadcrumb menor */
+    .breadcrumb {
+        font-size: 0.85rem;
+    }
+
+    /* Sidebar de ajuda: abaixo do form */
+    .col-md-4 {
+        margin-top: 1rem;
+    }
+}
+
+/* --- Tablet: 576px até 768px --- */
+@media (min-width: 576px) and (max-width: 768px) {
     .filter-section {
         padding: var(--spacing-md);
     }
-    
+
     .card-stat {
         margin-bottom: var(--spacing-md);
     }
-    
-    .table-custom {
+
+    /* Tabela: fonte menor, sem quebra */
+    .table {
         font-size: 0.875rem;
     }
-    
+
+    /* Botões não empilham */
     .btn-action-group {
-        flex-direction: column;
+        flex-direction: row;
+        gap: 0.25rem;
     }
 }
 
-/* Tablet - 768px até 992px */
-@media (min-width: 768px) and (max-width: 992px) {
+/* --- Tablet grande / Desktop: acima de 768px --- */
+@media (min-width: 768px) {
     .filter-section {
         padding: var(--spacing-lg);
     }
+
+    .table {
+        font-size: 1rem;
+    }
 }
 
-/* Desktop - acima de 992px */
-@media (min-width: 992px) {
-    .table-custom {
-        font-size: 1rem;
+/* --- Desktop grande: acima de 1200px --- */
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1140px;
     }
 }
 
@@ -196,17 +246,23 @@
 }
 
 /* ========================================
-   6. ACESSIBILIDADE
+   6. ACESSIBILIDADE — SA05-M3/M4
    ======================================== */
 
-/* Foco visível em elementos interativos */
-button:focus,
-a:focus,
-input:focus,
-select:focus,
-textarea:focus {
+/* SA05-M4: Foco visível padronizado — elimina repetição de outline em cada componente */
+:focus-visible {
     outline: 2px solid var(--primary-color);
-    outline-offset: 2px;
+    outline-offset: 3px;
+    border-radius: 3px;
+}
+
+/* Remove outline padrão do browser (substituído pelo :focus-visible acima) */
+button:focus:not(:focus-visible),
+a:focus:not(:focus-visible),
+input:focus:not(:focus-visible),
+select:focus:not(:focus-visible),
+textarea:focus:not(:focus-visible) {
+    outline: none;
 }
 
 /* Skip links (navegação por teclado) */
@@ -216,13 +272,81 @@ textarea:focus {
     left: 0;
     background: var(--primary-color);
     color: white;
-    padding: 8px;
+    padding: 8px 16px;
     text-decoration: none;
+    border-radius: 0 0 4px 0;
     z-index: 9999;
+    font-size: 0.9rem;
 }
 
 .skip-link:focus {
     top: 0;
+}
+
+/* ========================================
+   7. VALIDAÇÃO — SA05-M1
+   Padrão visual de feedback de formulário
+   ======================================== */
+
+/* Estado inválido: borda vermelha mais visível */
+.form-control.is-invalid,
+.form-select.is-invalid {
+    border-color: var(--danger-color);
+    border-width: 2px;
+    background-image: none; /* remove ícone padrão do Bootstrap */
+}
+
+/* Estado válido: borda verde */
+.form-control.is-valid,
+.form-select.is-valid {
+    border-color: var(--success-color);
+    border-width: 2px;
+    background-image: none;
+}
+
+/* Feedback de erro: consistência de espaçamento */
+.invalid-feedback.d-block {
+    margin-top: 0.35rem;
+    font-size: 0.85rem;
+    color: var(--danger-color);
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+/* Hint de campo (dica abaixo do input) */
+.form-text {
+    font-size: 0.8rem;
+    color: #6c757d;
+    margin-top: 0.25rem;
+}
+
+/* ========================================
+   8. NAVEGAÇÃO / MENU ATIVO — SA05-M2
+   ======================================== */
+
+/* Link ativo no menu de navegação */
+.navbar-nav .nav-link.active,
+.navbar-nav .nav-link[aria-current="page"] {
+    font-weight: 600;
+    color: #fff !important;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.7);
+}
+
+/* Breadcrumb: estilo padronizado */
+.breadcrumb {
+    background-color: transparent;
+    padding: 0;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+    color: #6c757d;
+}
+
+.breadcrumb-item.active {
+    color: #6c757d;
 }
 
 /* ========================================
