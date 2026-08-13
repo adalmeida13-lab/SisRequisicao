@@ -167,7 +167,10 @@ class ServiceRequestController extends Controller
                 ->with('error', 'Requisição não encontrada');
         }
 
-        return view('service_requests.show', ['requisicao' => $requisicao]);
+        // Converter para objeto para compatibilidade com Blade
+        $serviceRequest = (object) $requisicao;
+
+        return view('service_requests.show', ['serviceRequest' => $serviceRequest]);
     }
 
     /**
@@ -183,7 +186,10 @@ class ServiceRequestController extends Controller
                 ->with('error', 'Requisição não encontrada');
         }
 
-        return view('service_requests.edit', ['requisicao' => $requisicao]);
+        // Converter para objeto para compatibilidade com Blade
+        $serviceRequest = (object) $requisicao;
+
+        return view('service_requests.edit', ['serviceRequest' => $serviceRequest]);
     }
 
     /**
