@@ -63,35 +63,55 @@ Sistema interno para registrar e acompanhar requisições de serviço entre as �
 
 ---
 
-## 🚀 Como Executar
+## 🚀 Como Executar (Início Rápido)
 
-### 1. Clonar o Repositório
+### Opção 1 — Primeira vez (clone + configuração completa)
 
 ```bash
+# 1. Clone o repositório
 git clone https://github.com/adalmeida13-lab/SisRequisicao.git
 cd SisRequisicao
-```
 
-### 2. Instalar Dependências
+# 2. Checkout no branch de desenvolvimento
+git checkout jorladson
 
-```bash
-composer install
-```
+# 3. Instale dependências
+composer install --ignore-platform-req=ext-fileinfo
 
-### 3. Configurar .env
-
-```bash
+# 4. Configure o ambiente
 cp .env.example .env
 php artisan key:generate
-```
 
-### 4. Rodar o Servidor
+# 5. (Opcional) Banco SQLite — por enquanto dados em memória
+touch database/database.sqlite
+php artisan migrate
 
-```bash
+# 6. Inicie o servidor
 php artisan serve
 ```
 
-Acesse em: **http://localhost:8000**
+**Acesse:** http://localhost:8000/service-requests
+
+---
+
+### Opção 2 — Execução rápida (já configurado)
+
+```bash
+cd SisRequisicao
+php artisan serve
+```
+
+**Acesse:** http://localhost:8000/service-requests
+
+---
+
+### ⚠️ Observações Importantes
+
+1. **Dados em memória:** As requisições criadas são armazenadas em um array estático. Ao reiniciar o servidor, os dados são resetados. Isso é intencional para o protótipo front-end.
+
+2. **Sem autenticação:** Qualquer pessoa pode criar/editar/excluir requisições. Login será implementado em versão futura com Laravel Breeze.
+
+3. **Branch de trabalho:** Todo o desenvolvimento está no branch `jorladson`. O branch `main` pode estar desatualizado.
 
 ---
 
@@ -957,5 +977,158 @@ As evidências são descrições objetivas antes/depois em código, no arquivo:
 ---
 
 **Status:** 🟢 SA05 CONCLUÍDA  
-**Próxima:** SA06 - Apresentação Final  
+---
+
+## 📦 SA06 — Entrega Final do Protótipo Front-End
+
+### Objetivo
+
+Consolidar e entregar o protótipo Front-End garantindo execução no navegador, evidências de funcionamento, documentação mínima e rastreabilidade final.
+
+### Itens Entregues
+
+#### ✅ 1. Protótipo Executável
+
+**Status:** Rodando em `http://localhost:8000/service-requests`
+
+**Verificado:**
+- Abre no navegador sem erro visível
+- Console do navegador sem erros críticos (F12)
+- Servidor PHP inicia corretamente (`php artisan serve`)
+- CSS e Bootstrap carregam normalmente
+
+#### ✅ 2. Fluxo Demonstrado
+
+**Navegação:**
+- Listagem → Criar → Detalhes → Editar → Voltar (circular)
+- Breadcrumbs clicáveis em todas as views
+- Filtros funcionais (busca, status, prioridade)
+
+**Validação:**
+- Campos obrigatórios bloqueados com mensagem em português
+- Borda vermelha + ícone + texto complementar nos erros
+- Mensagens de sucesso (alert verde) após criar/editar
+
+**Interação principal:**
+- **Adicionar requisição** — formulário completo com validação PHP/Laravel
+- **Visualizar detalhes** — card com badges coloridos (status/prioridade)
+- **Editar requisição** — alterar status, prioridade e descrição
+- **Excluir requisição** — botão vermelho com confirmação JavaScript
+
+#### ✅ 3. Evidências de Funcionamento
+
+Todas as evidências estão descritas objetivamente em:  
+**`docs/checklist-entrega-SA06.md`**
+
+**O que as evidências mostram:**
+1. Listagem com cards de estatística (4 cards + tabela responsiva)
+2. Formulário de criação com validação (dicas + erros + hints acessíveis)
+3. Mensagem de sucesso (alert verde dismissível)
+4. Responsividade mobile (cards 2 colunas, tabela com colunas ocultas)
+
+#### ✅ 4. Organização do Repositório
+
+**Estrutura:**
+```
+SisRequisicao/
+├── app/Http/Controllers/          — Lógica de negócio
+├── resources/views/               — Blade templates
+│   ├── service_requests/          — CRUD completo
+│   ├── components/                — alert.blade.php
+│   └── layouts/                   — app.blade.php
+├── public/
+│   ├── css/custom-styles.css      — CSS customizado + responsividade
+│   ├── js/                        — JavaScript (futuro)
+│   └── images/                    — Imagens (futuro)
+├── docs/                          — Documentação completa (6 arquivos)
+└── README.md                      — Este arquivo
+```
+
+**Commits finais (SA01–SA06):**
+- SA01: 2 commits (plano do projeto)
+- SA02: 3 commits (formulário + listagem)
+- SA03: 2 commits (organização CSS/JS/Images)
+- SA04: 2 commits (views show/edit + docs técnica)
+- SA05: 4 commits (validação + layout + responsividade + refatoração)
+- SA06: 1 commit (checklist de entrega + README final)
+
+**Total:** ~14 commits no branch `jorladson`
+
+#### ✅ 5. README e Documentação
+
+**README contém:**
+- ✅ Objetivo do protótipo (1º parágrafo)
+- ✅ Como abrir/rodar (seção "Como Executar")
+- ✅ Funcionalidades entregues (seção "Funcionalidades Implementadas")
+- ✅ Integrantes do grupo (Jorladson, Ademilson, Marcos)
+- ✅ Stack tecnológica (PHP 8.3, Laravel 13, Bootstrap 5)
+
+**Documentação adicional:**
+- `docs/checklist-entrega-SA06.md` — Checklist de entrega (1 página)
+- `docs/checklist-qualidade-SA05.md` — Checklist de qualidade com evidências antes/depois
+- `docs/decisoes.md` — Padrões do time (6 seções)
+- `docs/arquitetura-tecnica-SA04.md` — Arquitetura técnica (800+ linhas)
+- `docs/plano-execucao-8h-SA04.md` — Plano de execução 8h
+- `docs/plano-do-projeto-SA01.md` — Plano do projeto
+
+#### ✅ 6. Quadro de Tarefas
+
+**Link:** https://github.com/users/Jorladsonp/projects/2/views/1
+
+**Status:** Todas as tarefas das SAs 01–06 concluídas ✅
+
+**Tarefas SA06 (8 tarefas):**
+1. T01 — Checagem de execução e funcionamento
+2. T02 — Ajustes finais (mensagens, links, validação)
+3. T03 — Gerar evidências (prints ou descrição objetiva)
+4. T04 — Criar checklist de entrega (1 página)
+5. T05 — Atualizar README com instruções de execução
+6. T06 — Fechar rastreabilidade (quadro + commits)
+7. T07 — Preparar apresentação curta (3 minutos)
+8. T08 — Upload no AVA e conclusão
+
+---
+
+### Resumo de Funcionalidades Finais
+
+| Categoria | Funcionalidades |
+|-----------|----------------|
+| **Navegação** | Listagem, Criar, Visualizar, Editar, Excluir, Filtrar |
+| **Validação** | PHP/Laravel server-side, mensagens em português, dicas preventivas |
+| **UX** | Mensagens flash, breadcrumbs, badges coloridos, confirmação de exclusão |
+| **Acessibilidade** | ARIA labels, `aria-required`, `aria-describedby`, `role="alert"` |
+| **Responsividade** | 4 breakpoints, cards 2/4 colunas, tabela com scroll horizontal |
+| **Padrões** | Nomes (kebab-case/camelCase), visual (container py-4), validação |
+
+---
+
+### Pendências Conhecidas
+
+| Pendência | Impacto | Observação |
+|-----------|---------|-----------|
+| Dados em memória (array estático) | **Baixo** | Dados são perdidos ao reiniciar. Migração para SQLite planejada. |
+| Sem autenticação de usuário | **Médio** | Qualquer um pode criar/editar/excluir. Login futuro com Laravel Breeze. |
+
+**Essas pendências são intencionais** para manter o escopo de protótipo front-end (SA01–SA06).
+
+---
+
+### Como Demonstrar o Protótipo (Apresentação 3min)
+
+1. **Abrir navegador:** `http://localhost:8000/service-requests`
+2. **Mostrar listagem:** Cards de estatística + tabela com requisições
+3. **Criar requisição:** Clicar "Nova Requisição" → Preencher → Submeter vazio (erro) → Preencher correto (sucesso)
+4. **Visualizar detalhes:** Clicar no ícone 👁️ de uma requisição
+5. **Editar requisição:** Alterar status ou prioridade → Salvar
+6. **Filtrar:** Buscar por texto ou status
+7. **Responsividade:** Redimensionar janela (DevTools) para 390px
+
+**Evidências:** Apontar `docs/checklist-entrega-SA06.md` e `docs/checklist-qualidade-SA05.md`
+
+---
+
+**Status:** 🟢 SA06 CONCLUÍDA — Protótipo Final Entregue  
+**Data de conclusão:** 13/08/2026  
+**Branch final:** `jorladson`  
+**Equipe:** Jorladson, Ademilson, Marcos  
 
