@@ -90,7 +90,7 @@ php artisan migrate
 php artisan serve
 ```
 
-**Acesse:** http://localhost:8000/service-requests
+**Acesse:** http://localhost:8000/
 
 ---
 
@@ -101,7 +101,7 @@ cd SisRequisicao
 php artisan serve
 ```
 
-**Acesse:** http://localhost:8000/service-requests
+**Acesse:** http://localhost:8000/
 
 ---
 
@@ -1128,7 +1128,5 @@ SisRequisicao/
 ---
 
 **Status:** 🟢 SA06 CONCLUÍDA — Protótipo Final Entregue  
-**Data de conclusão:** 13/08/2026  
 **Branch final:** `jorladson`  
-**Equipe:** Jorladson, Ademilson, Marcos  
-
+**Equipe:** Jorladson, Ademilson
