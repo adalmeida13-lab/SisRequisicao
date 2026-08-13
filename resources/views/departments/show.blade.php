@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('page-title')
+    Detalhes do Departamento
+@endsection
+
 @section('content')
     <div class="container">
         <h1>Detalhes do Departamento</h1>

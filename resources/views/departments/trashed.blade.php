@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('page-title')
+    Departamentos Excluídos
+@endsection
+
 @section('content')
     <div class="container">
         <h1>Departamentos Excluídos</h1>

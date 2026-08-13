@@ -16,6 +16,7 @@
             <div class="form-group">
                 <label for="docto">CNPJ</label>
                 <input type="text" class="form-control" id="docto" name="docto" required>
+            </div>
             <div class="form-group">
                 <label for="address">Endereço</label>
                 <input type="text" class="form-control" id="address" name="address" required>
@@ -27,8 +28,7 @@
                     <option value="0">Não</option>
                 </select>
             </div>
-            <button type="submit" class="btn btn-primary">Salvar</button
+            <button type="submit" class="btn btn-primary">Salvar</button>
         </form>
     </div>
 @endsection
-

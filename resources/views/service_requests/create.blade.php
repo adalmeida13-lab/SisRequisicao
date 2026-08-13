@@ -39,17 +39,28 @@
                                 <i class="bi bi-building"></i>
                                 Empresa <span class="text-danger" aria-hidden="true">*</span>
                             </label>
+                            @if($companies->isEmpty())
+                                <div class="alert alert-warning py-2 small">
+                                    <i class="bi bi-exclamation-triangle me-1"></i>
+                                    Nenhuma empresa ativa cadastrada. Cadastre uma empresa antes de abrir a requisição.
+                                </div>
+                            @endif
                             <select 
                                 class="form-select @error('empresa_id') is-invalid @enderror" 
                                 id="empresa_id" 
                                 name="empresa_id" 
                                 required
+                                {{ $companies->isEmpty() ? 'disabled' : '' }}
                                 aria-required="true"
                                 aria-describedby="empresa_hint @error('empresa_id') empresa_error @enderror">
-                                <option value="">Selecione uma empresa</option>
-                                <option value="1" {{ old('empresa_id') == 1 ? 'selected' : '' }}>Empresa A</option>
-                                <option value="2" {{ old('empresa_id') == 2 ? 'selected' : '' }}>Empresa B</option>
-                                <option value="3" {{ old('empresa_id') == 3 ? 'selected' : '' }}>Empresa C</option>
+                                <option value="">
+                                    {{ $companies->isEmpty() ? 'Nenhuma empresa disponível' : 'Selecione uma empresa' }}
+                                </option>
+                                @foreach($companies as $company)
+                                    <option value="{{ $company->id }}" {{ old('empresa_id') == $company->id ? 'selected' : '' }}>
+                                        {{ $company->name }}
+                                    </option>
+                                @endforeach
                             </select>
                             {{-- SA05-M1: dica antes do erro --}}
                             <small id="empresa_hint" class="form-text text-muted">
@@ -69,18 +80,28 @@
                                 <i class="bi bi-diagram-3"></i>
                                 Departamento <span class="text-danger" aria-hidden="true">*</span>
                             </label>
+                            @if($departments->isEmpty())
+                                <div class="alert alert-warning py-2 small">
+                                    <i class="bi bi-exclamation-triangle me-1"></i>
+                                    Nenhum departamento ativo cadastrado. Cadastre um departamento antes de abrir a requisição.
+                                </div>
+                            @endif
                             <select 
                                 class="form-select @error('departamento_id') is-invalid @enderror" 
                                 id="departamento_id" 
                                 name="departamento_id" 
                                 required
+                                {{ $departments->isEmpty() ? 'disabled' : '' }}
                                 aria-required="true"
                                 aria-describedby="departamento_hint @error('departamento_id') departamento_error @enderror">
-                                <option value="">Selecione um departamento</option>
-                                <option value="1" {{ old('departamento_id') == 1 ? 'selected' : '' }}>TI</option>
-                                <option value="2" {{ old('departamento_id') == 2 ? 'selected' : '' }}>RH</option>
-                                <option value="3" {{ old('departamento_id') == 3 ? 'selected' : '' }}>Financeiro</option>
-                                <option value="4" {{ old('departamento_id') == 4 ? 'selected' : '' }}>Operações</option>
+                                <option value="">
+                                    {{ $departments->isEmpty() ? 'Nenhum departamento disponível' : 'Selecione um departamento' }}
+                                </option>
+                                @foreach($departments as $department)
+                                    <option value="{{ $department->id }}" {{ old('departamento_id') == $department->id ? 'selected' : '' }}>
+                                        {{ $department->name }}{{ $department->company ? ' — ' . $department->company->name : '' }}
+                                    </option>
+                                @endforeach
                             </select>
                             <small id="departamento_hint" class="form-text text-muted">
                                 Preencha este campo. Selecione o departamento de destino.

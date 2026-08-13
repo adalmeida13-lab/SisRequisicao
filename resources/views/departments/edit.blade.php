@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('page-title')
+    Editar Departamento
+@endsection
+
 @section('content')
     <div class="container">
         <h1>Editar Departamento</h1>
