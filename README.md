@@ -650,6 +650,201 @@ Para detalhes completos de cada boa prática aplicada, consulte:
 
 ---
 
-**Status:** 🟡 SA03 IMPLEMENTADA  
-**Próxima:** SA04 - Integração completa  
+**Status:** 🟢 SA03 CONCLUÍDA  
+**Próxima:** SA04 - Organização do Trabalho
+
+---
+
+## 📋 SA04 - Organização do Trabalho e Definição de Prazos
+
+### Objetivo
+
+Aplicar princípios de organização do trabalho e controle de atividades usando quadro de tarefas e plano de execução simples (8 horas).
+
+### Tarefas Implementadas (8 tarefas obrigatórias)
+
+#### Aula 1 (4h) - Implementação de Views e UX
+
+| ID | Tarefa | Prioridade | Responsável | Status | Estimativa |
+|----|--------|-----------|-------------|--------|------------|
+| T01 | Implementar view show.blade.php completa | **MUST** | Jorladson | ✅ Concluída | M (média) |
+| T02 | Implementar view edit.blade.php completa | **MUST** | Ademilson | ✅ Concluída | M (média) |
+| T03 | Criar sistema de mensagens flash | **MUST** | Marcos | ✅ Concluída | P (pequena) |
+| T04 | Melhorar acessibilidade (aria-labels) | **MUST** | Jorladson | ✅ Concluída | P (pequena) |
+
+#### Aula 2 (4h) - Navegação, Documentação e Qualidade
+
+| ID | Tarefa | Prioridade | Responsável | Status | Estimativa |
+|----|--------|-----------|-------------|--------|------------|
+| T05 | Adicionar breadcrumbs em todas as views | **MUST** | Ademilson | ✅ Concluída | M (média) |
+| T06 | Criar documentação técnica (arquitetura) | **MUST** | Marcos | ✅ Concluída | M (média) |
+| T07 | Testar fluxo completo e documentar | **MUST** | Jorladson | ✅ Concluída | G (grande) |
+| T08 | Atualizar README e fazer commit | **MUST** | Equipe | ✅ Concluída | P (pequena) |
+
+### Melhorias Implementadas
+
+✅ **View show.blade.php completa**
+- Card responsivo com informações estruturadas
+- Badges coloridos por status e prioridade
+- Breadcrumbs de navegação
+- Botões de ação (Editar, Excluir, Voltar)
+- Atributos ARIA para acessibilidade
+
+✅ **View edit.blade.php completa**
+- Formulário completo com validação
+- Campos desabilitados (empresa, departamento, data)
+- Campos editáveis (status, prioridade, descrição)
+- Sidebar com dicas de edição
+- Informações de criação/atualização
+
+✅ **Sistema de Mensagens Flash**
+- Componente reutilizável `alert.blade.php`
+- 4 tipos de mensagem (success, error, warning, info)
+- Auto-dismiss após 5 segundos
+- Acessível com aria-live e aria-atomic
+- Ícones Bootstrap Icons
+
+✅ **Melhorias de Acessibilidade (WCAG 2.1)**
+- Atributos `aria-label` em botões de ação
+- `aria-required="true"` em campos obrigatórios
+- `role="alert"` em feedbacks de validação
+- `aria-live="polite"` em mensagens de sucesso
+- `aria-live="assertive"` em mensagens de erro
+- Breadcrumbs com `aria-label="breadcrumb"` e `aria-current="page"`
+
+✅ **Navegação por Breadcrumbs**
+- Estrutura semântica `<nav>`
+- Hierarquia clara (Requisições > Detalhes > Editar)
+- Links funcionais para navegação rápida
+
+✅ **Documentação Técnica Completa**
+- `docs/arquitetura-tecnica-SA04.md` (800+ linhas)
+- Estrutura de pastas documentada
+- Todas as rotas mapeadas
+- Fluxos de criação, listagem, edição e visualização
+- Validações implementadas
+- Padrões de acessibilidade
+- Componentes reutilizáveis
+- Troubleshooting e referências
+
+✅ **Plano de Execução (8h)**
+- `docs/plano-execucao-8h-SA04.md`
+- 8 tarefas priorizadas (Must)
+- Estimativas por tarefa (P/M/G)
+- 3 riscos identificados com ações preventivas
+- Planejado x Realizado documentado
+- 2 ajustes de planejamento registrados
+
+### Ajustes de Planejamento Realizados
+
+**Ajuste 1 (Durante Aula 1):**
+- **O quê:** Tarefa T04 (Acessibilidade) dividida em T04a e T04b
+- **Motivo:** Atraso de 30min na implementação da view edit (complexidade maior que previsto)
+- **Ação:** Jorladson iniciou T04a (views já prontas) e deixou T04b para início da Aula 2
+- **Evidência:** Commits separados para cada view
+
+**Ajuste 2 (Durante Aula 2):**
+- **O quê:** Repriorização - T07 (Testes) executada antes de T06 (Docs)
+- **Motivo:** Testes revelaram bugs que precisaram correção imediata
+- **Ação:** Marcos pausou documentação para corrigir bugs, depois retomou
+- **Evidência:** Commits "fix: corrige validação" antes de "docs: arquitetura técnica"
+
+### Riscos Identificados e Ações Preventivas
+
+| Risco | Ação Preventiva | Status |
+|-------|----------------|--------|
+| **Conflito de edição simultânea** | Cada integrante em arquivos diferentes + commits frequentes | ✅ Evitado |
+| **Falta de tempo para docs** | Reservar 45min finais da Aula 2 para documentação | ✅ Aplicado |
+| **Erros de validação não previstos** | Usar ambiente de testes local + documentar bugs | ✅ Aplicado |
+
+### Arquivos Criados/Modificados
+
+**Novos:**
+- `resources/views/components/alert.blade.php` - Componente de mensagens flash
+- `docs/plano-execucao-8h-SA04.md` - Plano de 8 horas
+- `docs/arquitetura-tecnica-SA04.md` - Documentação técnica completa
+
+**Modificados:**
+- `resources/views/service_requests/show.blade.php` - Reescrito com cards e breadcrumbs
+- `resources/views/service_requests/edit.blade.php` - Reescrito com formulário completo
+- `app/Http/Controllers/ServiceRequestController.php` - Ajustes para compatibilidade
+- `README.md` - Esta seção SA04
+
+### Commits Realizados
+
+```bash
+feat(SA04-Aula1): Implementa views show/edit + mensagens flash
+- T01: View show.blade.php completa com cards e badges
+- T02: View edit.blade.php com formulário estruturado
+- T03: Componente alert.blade.php para mensagens flash
+- T04: Melhorias de acessibilidade (aria-labels, roles)
+- Cria plano de execução (8h) para SA04
+```
+
+### Fluxo de Navegação Implementado
+
+```
+Dashboard
+    ↓
+Listagem (/service-requests)
+    ↓
+Detalhes (/service-requests/{id})
+    ├─→ Editar (/service-requests/{id}/edit)
+    │       ↓
+    │   Atualizar (PUT) → Volta para Detalhes
+    │
+    ├─→ Excluir (DELETE) → Volta para Listagem
+    │
+    └─→ Voltar → Listagem
+
+Nova Requisição (/service-requests/create)
+    ↓
+Criar (POST) → Listagem com mensagem de sucesso
+```
+
+### Cenários de Teste Documentados (12 cenários)
+
+1. ✅ Criar requisição com dados válidos
+2. ✅ Criar requisição com campos vazios (erro esperado)
+3. ✅ Criar requisição com descrição < 10 caracteres (erro)
+4. ✅ Editar requisição alterando status
+5. ✅ Editar requisição alterando prioridade
+6. ✅ Editar requisição com descrição inválida (erro)
+7. ✅ Visualizar detalhes de requisição existente
+8. ✅ Tentar visualizar requisição inexistente (redirect com erro)
+9. ✅ Excluir requisição (confirmação JS)
+10. ✅ Navegar por breadcrumbs
+11. ✅ Verificar mensagens flash após operações
+12. ✅ Testar acessibilidade com leitor de tela (NVDA)
+
+### Evidências de Controle (Quadro de Tarefas)
+
+**Print 1 - Final da Aula 1:**
+- 4 tarefas movidas para "Concluído" (T01, T02, T03, T04a)
+- 1 tarefa em "Fazendo" (T04b - parcial)
+- 3 tarefas em "A Fazer" (T05, T06, T07, T08)
+
+**Print 2 - Final da Aula 2:**
+- 8 tarefas em "Concluído" (100%)
+- 2 ajustes de planejamento registrados
+- Commits finalizados e documentação completa
+
+### Lições Aprendidas
+
+1. **Estimativas mais realistas:** Views complexas devem ser estimadas como "M" ou "G", não "P"
+2. **Importância de testes:** Executar testes ANTES de documentar evita retrabalho
+3. **Comunicação contínua:** Avisar o grupo sobre atrasos permite ajustes rápidos
+4. **Commits atômicos:** Facilita reversão de erros e histórico mais claro
+
+### Documentação Completa
+
+Para detalhes técnicos completos:
+- **Plano de Execução:** `docs/plano-execucao-8h-SA04.md`
+- **Arquitetura Técnica:** `docs/arquitetura-tecnica-SA04.md`
+- **Checklist SA03:** `docs/Checklist-Boas-Praticas-SA03.md`
+
+---
+
+**Status:** 🟢 SA04 CONCLUÍDA  
+**Próxima:** SA05 - Integração com Banco de Dados  
 
