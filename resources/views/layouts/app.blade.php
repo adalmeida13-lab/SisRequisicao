@@ -62,7 +62,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
         <div class="container-fluid">
 
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="{{ route('dashboard') }}">
                 <i class="bi bi-clipboard-check"></i>
                 SISREQUISIÇÃO
             </a>
@@ -100,7 +100,7 @@
                     MENU
                 </h6>
 
-                <a href="#">
+                <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
                     <i class="bi bi-speedometer2"></i>
                     Dashboard
                 </a>

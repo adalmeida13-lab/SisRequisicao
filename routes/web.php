@@ -2,10 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ServiceRequestController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [ServiceRequestController::class, 'dashboard'])->name('dashboard');
 
 Route::get('/users/trashed', [UserController::class, 'trashed'])->name('users.trashed');
 Route::put('/users/{id}/restore', [UserController::class, 'restore'])->name('users.restore');
@@ -23,6 +22,5 @@ Route::get('/service_requests/trashed', [\App\Http\Controllers\ServiceRequestCon
 Route::put('/service_requests/{id}/restore', [\App\Http\Controllers\ServiceRequestController::class, 'restore'])->name('service_requests.restore');
 Route::delete('/service_requests/{id}/force-delete', [\App\Http\Controllers\ServiceRequestController::class, 'forceDelete'])->name('service_requests.forceDelete');
 Route::resource('servicerequest', \App\Http\Controllers\ServiceRequestController::class);
-
 
 

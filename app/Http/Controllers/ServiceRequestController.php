@@ -97,6 +97,33 @@ class ServiceRequestController extends Controller
     }
 
     /**
+     * Painel inicial com um resumo das requisições.
+     */
+    public function dashboard()
+    {
+        $total = count(self::$requisicoes);
+        $abertas = count(array_filter(self::$requisicoes, fn($r) => $r['status'] === 'aberta'));
+        $emAndamento = count(array_filter(self::$requisicoes, fn($r) => $r['status'] === 'em_andamento'));
+        $encerradas = count(array_filter(self::$requisicoes, fn($r) => $r['status'] === 'encerrada'));
+        $canceladas = count(array_filter(self::$requisicoes, fn($r) => $r['status'] === 'cancelada'));
+
+        $recentRequests = collect(self::$requisicoes)
+            ->sortByDesc('data')
+            ->take(5)
+            ->map(fn($request) => (object) $request)
+            ->values();
+
+        return view('dashboard', compact(
+            'total',
+            'abertas',
+            'emAndamento',
+            'encerradas',
+            'canceladas',
+            'recentRequests'
+        ));
+    }
+
+    /**
      * Formulário para criar nova requisição
      */
     public function create()
